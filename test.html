@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>בדיקות QA - מנוע הבניינים</title>
+<style>
+  body { font-family: monospace; font-size: 16px; padding: 2rem; background:#111; color:#eee; }
+  .pass { color: #6f6; }
+  .fail { color: #f66; }
+  pre { white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<h1>בדיקות QA - מנוע נטיית הפועל</h1>
+<div id="output">מריץ בדיקות...</div>
+
+<script src="data/verb-roots.js"></script>
+<script src="data/vocabulary.js"></script>
+<script src="js/verbEngine.js"></script>
+<script src="js/verbEngine.test.js"></script>
+<script>
+  const out = document.getElementById('output');
+  const results = runVerbEngineTests();
+  out.innerHTML = `<p class="${results.fail === 0 ? 'pass' : 'fail'}">
+    ${results.pass} עברו, ${results.fail} נכשלו
+  </p>` + (results.fail ? `<pre class="fail">${JSON.stringify(results.failures, null, 2)}</pre>` : '<p class="pass">כל הבדיקות עברו בהצלחה ✓</p>');
+</script>
+</body>
+</html>

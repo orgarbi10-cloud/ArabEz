@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArabEz — ערבית בקלות | לימוד ערבית ספרותית לדוברי עברית</title>
+<meta name="description" content="אתר ללימוד ערבית ספרותית (MSA) לדוברי עברית: אוצר מילים, מנוע נטיית פעלים ותרגול הבניינים.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a href="#/" class="skip-link">דלג לתוכן הראשי</a>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="#/" class="brand">
+      <span class="brand__icon" aria-hidden="true">ع</span>
+      <span class="brand__titles">
+        <span class="brand__title" dir="ltr"><span class="brand__title-arab">Arab</span><span class="brand__title-ez">Ez</span></span>
+        <span class="brand__subtitle">ערבית בקלות</span>
+      </span>
+    </a>
+    <nav class="main-nav" aria-label="ניווט ראשי">
+      <a href="#/vocab" data-nav="vocab">אוצר מילים</a>
+      <a href="#/verbs" data-nav="verbs">תרגול פעלים</a>
+      <a href="#/grammar" data-nav="grammar">חוקי השפה</a>
+      <a href="#/islam" data-nav="islam">אסלאם</a>
+      <a href="#/search" data-nav="search">חיפוש</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="main-nav" aria-label="פתח תפריט">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="app" tabindex="-1"></main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="data/verb-roots.js"></script>
+<script src="data/verb-practice-set.js"></script>
+<script src="data/vocabulary.js"></script>
+<script src="data/islam.js"></script>
+<script src="js/verbEngine.js"></script>
+<script src="js/verbEngine.test.js"></script>
+<script src="js/app.js"></script>
+<script src="js/vocabulary.js"></script>
+<script src="js/verbDrills.js"></script>
+<script src="js/grammarRules.js"></script>
+<script src="js/islam.js"></script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+[
+  {"root": "كتب", "binyan": "II", "meaning": "לימד כתיבה / גרם לו לכתוב"},
+  {"root": "كتب", "binyan": "III", "meaning": "התכתב עם"},
+  {"root": "كتب", "binyan": "IV", "meaning": "הכתיב / לימד לכתוב"},
+  {"root": "كتب", "binyan": "VI", "meaning": "התכתבו זה עם זה"},
+  {"root": "كتب", "binyan": "VIII", "meaning": "נרשם למנוי / נרשם להנפקת מניות"},
+  {"root": "كتب", "binyan": "X", "meaning": "ביקש ממישהו לכתוב עבורו / הכתיב לו"},
+
+  {"root": "فهم", "binyan": "II", "meaning": "הסביר למישהו / גרם לו להבין"},
+  {"root": "فهم", "binyan": "V", "meaning": "הבין בהדרגה, התייחס בהבנה"},
+  {"root": "فهم", "binyan": "VI", "meaning": "הגיעו להבנה הדדית"},
+  {"root": "فهم", "binyan": "X", "meaning": "ביקש הבהרה / שאל לבירור"},
+
+  {"root": "سمع", "binyan": "II", "meaning": "השמיע למישהו משהו / דקלם בעל־פה"},
+  {"root": "سمع", "binyan": "V", "meaning": "הקשיב בסתר / בדק בסטטוסקופ"},
+  {"root": "سمع", "binyan": "VI", "meaning": "עבר משמועה לשמועה, נודע לכולם"},
+  {"root": "سمع", "binyan": "X", "meaning": "הקשיב (בקשב)"},
+
+  {"root": "شرب", "binyan": "II", "meaning": "השקה / הרטיב-הספיג"},
+  {"root": "شرب", "binyan": "IV", "meaning": "השקה / חדר בו (רגש)"},
+  {"root": "شرب", "binyan": "V", "meaning": "ספג לתוכו"},
+
+  {"root": "ذهب", "binyan": "II", "meaning": "ציפה בזהב"},
+  {"root": "ذهب", "binyan": "IV", "meaning": "הסיר, גרם להיעלם"},
+
+  {"root": "رجع", "binyan": "II", "meaning": "חזר על (בכתב) / הידהד"},
+  {"root": "رجع", "binyan": "III", "meaning": "בדק/עבר שוב על (מידע, שיעור)"},
+  {"root": "رجع", "binyan": "IV", "meaning": "החזיר (משהו)"},
+  {"root": "رجع", "binyan": "VI", "meaning": "נסוג, חזר בו"},
+  {"root": "رجع", "binyan": "VIII", "meaning": "לקח בחזרה / נשא בשנית את גרושתו"},
+  {"root": "رجع", "binyan": "X", "meaning": "קיבל בחזרה / נזכר"},
+
+  {"root": "خرج", "binyan": "II", "meaning": "הכשיר / חינך (תלמיד)"},
+  {"root": "خرج", "binyan": "IV", "meaning": "הוציא, גירש, הפיק (סרט)"},
+  {"root": "خرج", "binyan": "V", "meaning": "סיים לימודים, קיבל תואר"},
+  {"root": "خرج", "binyan": "VI", "meaning": "הסכם הדדי בין יורשים (מונח הלכתי)"},
+  {"root": "خرج", "binyan": "X", "meaning": "חילץ, גזר / הסיק"},
+
+  {"root": "دخل", "binyan": "IV", "meaning": "הכניס"},
+  {"root": "دخل", "binyan": "V", "meaning": "התערב"},
+  {"root": "دخل", "binyan": "VI", "meaning": "חפפו / התערבבו זה בזה"},
+
+  {"root": "جلس", "binyan": "III", "meaning": "ישב עם, התרועע עם"},
+  {"root": "جلس", "binyan": "IV", "meaning": "הושיב"},
+  {"root": "جلس", "binyan": "VI", "meaning": "ישבו יחד"},
+
+  {"root": "نظر", "binyan": "II", "meaning": "ניסח כתיאוריה / השווה"},
+  {"root": "نظر", "binyan": "III", "meaning": "התווכח / דן עם"},
+  {"root": "نظر", "binyan": "IV", "meaning": "דחה, נתן ארכה"},
+  {"root": "نظر", "binyan": "VI", "meaning": "התווכחו זה עם זה"},
+  {"root": "نظر", "binyan": "VIII", "meaning": "חיכה"},
+
+  {"root": "عمل", "binyan": "III", "meaning": "התייחס אל / התנהג עם / ניהל עסקים עם"},
+  {"root": "عمل", "binyan": "IV", "meaning": "הפעיל / השתמש (בכוח מחשבה וכד')"},
+  {"root": "عمل", "binyan": "VI", "meaning": "התנהל / התייחס הדדית עם"},
+  {"root": "عمل", "binyan": "VIII", "meaning": "סער / התרוצץ בפנים (על רגשות/מחשבות)"},
+  {"root": "عمل", "binyan": "X", "meaning": "השתמש"},
+
+  {"root": "لعب", "binyan": "III", "meaning": "שיחק עם (מישהו)"},
+  {"root": "لعب", "binyan": "VI", "meaning": "תמרן / שיחק במישהו / רימה"},
+
+  {"root": "درس", "binyan": "II", "meaning": "לימד (מקצוע/תלמידים)"},
+  {"root": "درس", "binyan": "III", "meaning": "למד יחד עם (מישהו)"},
+  {"root": "درس", "binyan": "VI", "meaning": "דנו / למדו יחד"},
+  {"root": "درس", "binyan": "VII", "meaning": "נמחק / נעלמו עקבותיו"},
+
+  {"root": "فتح", "binyan": "II", "meaning": "פתח (הרבה דברים) / פתח ביסודיות"},
+  {"root": "فتح", "binyan": "III", "meaning": "פנה / יזם שיחה עם מישהו בנושא מסוים"},
+  {"root": "فتح", "binyan": "VII", "meaning": "נפתח (בעצמו)"},
+  {"root": "فتح", "binyan": "VIII", "meaning": "חנך / פתח (טקס, מוסד)"},
+  {"root": "فتح", "binyan": "X", "meaning": "פתח ב- / ביקש פתיחה או עזרה"},
+
+  {"root": "غلق", "binyan": "II", "meaning": "סגר (הרבה דברים) / סגר ביסודיות"},
+  {"root": "غلق", "binyan": "IV", "meaning": "סגר / נעל"},
+  {"root": "غلق", "binyan": "VII", "meaning": "נסגר (בעצמו)"},
+  {"root": "غلق", "binyan": "X", "meaning": "היה קשה להבנה / נאלם דיבור"},
+
+  {"root": "طلب", "binyan": "III", "meaning": "דרש מ- (מישהו)"},
+  {"root": "طلب", "binyan": "V", "meaning": "דרש / חייב (כתנאי)"},
+
+  {"root": "عرف", "binyan": "II", "meaning": "הגדיר / הכיר בין / יידע"},
+  {"root": "عرف", "binyan": "V", "meaning": "הכיר / התוודע ל-"},
+  {"root": "عرف", "binyan": "VI", "meaning": "התוודעו הדדית / הכירו זה את זה"},
+  {"root": "عرف", "binyan": "VIII", "meaning": "הודה / התוודה"},
+
+  {"root": "حفظ", "binyan": "II", "meaning": "גרם למישהו לשנן (בעל־פה)"},
+  {"root": "حفظ", "binyan": "III", "meaning": "שמר על / הקפיד על"},
+  {"root": "حفظ", "binyan": "V", "meaning": "היה מסויג / שמר על עמדה זהירה"},
+  {"root": "حفظ", "binyan": "VIII", "meaning": "שמר לעצמו / החזיק ב-"},
+  {"root": "حفظ", "binyan": "X", "meaning": "ביקש ממישהו לשמור / להפקיד בידיו"},
+
+  {"root": "كسر", "binyan": "II", "meaning": "שיבר לחתיכות / ניפץ"},
+  {"root": "كسر", "binyan": "V", "meaning": "נשבר לחתיכות (בעצמו)"},
+  {"root": "كسر", "binyan": "VII", "meaning": "נשבר (בעצמו)"},
+
+  {"root": "غسل", "binyan": "II", "meaning": "כיבס / רחץ ביסודיות"},
+  {"root": "غسل", "binyan": "VII", "meaning": "נשטף / נכבס (בעצמו)"},
+  {"root": "غسل", "binyan": "VIII", "meaning": "התרחץ / התקלח"},
+
+  {"root": "لبس", "binyan": "IV", "meaning": "הלביש"},
+  {"root": "لبس", "binyan": "V", "meaning": "הסתבך / נלכד בשעת מעשה"},
+  {"root": "لبس", "binyan": "VIII", "meaning": "היה מעורפל / התבלבל"},
+
+  {"root": "ركب", "binyan": "II", "meaning": "הרכיב"},
+  {"root": "ركب", "binyan": "V", "meaning": "הורכב מ-"},
+  {"root": "ركب", "binyan": "VI", "meaning": "נערם זה על זה"},
+  {"root": "ركب", "binyan": "VIII", "meaning": "ביצע (עבירה)"},
+
+  {"root": "نزل", "binyan": "II", "meaning": "הוריד (טקסט/גילוי)"},
+  {"root": "نزل", "binyan": "III", "meaning": "נאבק / התעמת בקרב"},
+  {"root": "نزل", "binyan": "IV", "meaning": "הוריד"},
+  {"root": "نزل", "binyan": "VI", "meaning": "וויתר (על זכות)"},
+
+  {"root": "صعد", "binyan": "II", "meaning": "הסלים"},
+  {"root": "صعد", "binyan": "V", "meaning": "התקשה / טיפס בקושי"},
+  {"root": "صعد", "binyan": "VI", "meaning": "עלה בהדרגה, הוסלם"},
+
+  {"root": "خدم", "binyan": "X", "meaning": "השתמש / העסיק"},
+
+  {"root": "رسم", "binyan": "II", "meaning": "מינה (לתפקיד רשמי)"},
+  {"root": "رسم", "binyan": "VIII", "meaning": "הצטייר (על הפנים)"},
+
+  {"root": "طبخ", "binyan": "II", "meaning": "בישל ביסודיות"},
+
+  {"root": "زرع", "binyan": "III", "meaning": "חכר קרקע בשותפות"},
+  {"root": "زرع", "binyan": "VII", "meaning": "הושתל / השתרש"},
+  {"root": "زرع", "binyan": "X", "meaning": "טיפח / גידל (בעיקר בחקלאות מים)"},
+
+  {"root": "حمل", "binyan": "II", "meaning": "העמיס / העלה (קובץ)"},
+  {"root": "حمل", "binyan": "IV", "meaning": "עזר לשאת משא"},
+  {"root": "حمل", "binyan": "V", "meaning": "סבל / נשא באחריות"},
+  {"root": "حمل", "binyan": "VI", "meaning": "היה מוטה נגד / לחץ בכוח"},
+  {"root": "حمل", "binyan": "VIII", "meaning": "סבל / היה סביר"},
+
+  {"root": "دفع", "binyan": "III", "meaning": "הגן (על)"},
+  {"root": "دفع", "binyan": "VI", "meaning": "דחפו זה את זה"},
+  {"root": "دفع", "binyan": "VII", "meaning": "התפרץ קדימה"},
+
+  {"root": "جمع", "binyan": "II", "meaning": "אסף, כינס (בכמות)"},
+  {"root": "جمع", "binyan": "IV", "meaning": "הסכים פה אחד, החליט סופית"},
+  {"root": "جمع", "binyan": "V", "meaning": "התאסף, התקהל"},
+  {"root": "جمع", "binyan": "VIII", "meaning": "נפגש, התכנס (לישיבה)"},
+  {"root": "جمع", "binyan": "X", "meaning": "אזר את כוחותיו, התאושש"},
+
+  {"root": "قطع", "binyan": "II", "meaning": "חתך לחתיכות / פרוסות"},
+  {"root": "قطع", "binyan": "III", "meaning": "החרים; קטע קשר עם"},
+  {"root": "قطع", "binyan": "IV", "meaning": "העניק אחוזת קרקע (פיאודלית)"},
+  {"root": "قطع", "binyan": "V", "meaning": "נקטע, התפרק לחתיכות"},
+  {"root": "قطع", "binyan": "VI", "meaning": "הצטלב (כבישים); ניתק קשר"},
+  {"root": "قطع", "binyan": "VII", "meaning": "נקטע, נותק, פסק"},
+  {"root": "قطع", "binyan": "VIII", "meaning": "ניכה / קטע חלק (מתוך)"},
+  {"root": "قطع", "binyan": "X", "meaning": "ניכה (מהמשכורת וכד')"},
+
+  {"root": "ضرب", "binyan": "II", "meaning": "הכה שוב ושוב, בחוזקה; ערבב"},
+  {"root": "ضرب", "binyan": "III", "meaning": "נאבק, החליף מהלומות; ספסר/סחר"},
+  {"root": "ضرب", "binyan": "IV", "meaning": "שבת (שביתה), נמנע מ-"},
+  {"root": "ضرب", "binyan": "VI", "meaning": "התנגש, סתר (זה את זה)"},
+  {"root": "ضرب", "binyan": "VII", "meaning": "נחבט, נפגע"},
+  {"root": "ضرب", "binyan": "VIII", "meaning": "היה נסער/מוטרד; היה לא יציב"},
+
+  {"root": "حكم", "binyan": "II", "meaning": "מינה כשופט/בורר; העניק סמכות מלאה"},
+  {"root": "حكم", "binyan": "III", "meaning": "העמיד לדין, תבע"},
+  {"root": "حكم", "binyan": "IV", "meaning": "חיזק, שכלל, שלט במיומנות"},
+  {"root": "حكم", "binyan": "V", "meaning": "שלט / שרר (בכוח, לעיתים בשרירותיות)"},
+  {"root": "حكم", "binyan": "VI", "meaning": "פנו יחד לבורר / שופט"},
+  {"root": "حكم", "binyan": "VIII", "meaning": "פנה לבוררות / לפסיקה"},
+  {"root": "حكم", "binyan": "X", "meaning": "התבסס, השתרש (חוזק)"},
+
+  {"root": "نجح", "binyan": "II", "meaning": "העביר (תלמיד), הצליח מישהו אחר"},
+  {"root": "نجح", "binyan": "IV", "meaning": "הצליח (גרם להצלחה)"},
+
+  {"root": "فشل", "binyan": "II", "meaning": "סיכל, הכשיל (משהו/מישהו)"},
+  {"root": "فشل", "binyan": "IV", "meaning": "סיכל, הכשיל"},
+
+  {"root": "رقص", "binyan": "II", "meaning": "הרקיד (גרם לו לרקוד)"},
+  {"root": "رقص", "binyan": "III", "meaning": "רקד עם (מישהו)"},
+
+  {"root": "ضحك", "binyan": "II", "meaning": "הצחיק (גרם לו לצחוק)"},
+  {"root": "ضحك", "binyan": "III", "meaning": "התבדח, צחק / התלוצץ עם"},
+  {"root": "ضحك", "binyan": "IV", "meaning": "הצחיק (גרם לו לצחוק)"},
+
+  {"root": "قفز", "binyan": "II", "meaning": "הקפיץ (גרם לו לקפוץ)"},
+
+  {"root": "سبح", "binyan": "II", "meaning": "שיבח והילל (את האל)"}
+]
