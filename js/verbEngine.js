@@ -26,6 +26,11 @@
   const HAMZA_KASRA = "إ"; // إ (המזת קטע עם i, במצדרי IV/VII/VIII/X)
   const HAMZA_WASL = ALIF; // המזת וצל נכתבת כאלף רגילה + ניקוד קסרה להמחשה
 
+  // ממיר סימון תנועה לקסיקלי ('a'/'i'/'u', כפי שמופיע ב-VERB_ROOTS) לניקוד
+  // בפועל. משמש רק בבניין I, שבו תנועת ר2 בעבר ובהווה היא מידע לקסיקלי
+  // לכל שורש (לא ניתנת לגזירה מכלל - ראו הערה ב-BINYANIM למטה).
+  const VOWEL_MARKS = { a: FATHA, i: KASRA, u: DAMMA };
+
   // ---------------------------------------------------------------------
   // מיפוי עיצורים ערבית -> תעתיק עברי (מאומת מול כל 40 השורשים בקובץ הנתונים)
   // ---------------------------------------------------------------------
@@ -67,6 +72,15 @@
   //   presentBase    - הגזע לפני ר3 בהווה/עתיד ובציווי (ערבית + תעתיק)
   //   imperativeHamza- תחילית ההמזה בציווי, אם יש (ערבית + תעתיק)
   //   masdar         - תבנית המצדר המלאה (ערבית + תעתיק), או null אם משתנה
+  //
+  // בבניין I בלבד, pastBase/presentBase/imperativeHamza מקבלים גם root
+  // (הפרמטר החמישי/הראשון בהתאמה) ומשתמשים בתנועת ר2 הלקסיקלית שלו
+  // (root.pastVowel / root.presentVowel, כל אחד 'a'|'i'|'u' - ראו
+  // VERB_ROOTS) במקום פתחة קבועה: זו תכונה שאינה ניתנת לגזירה מכלל דקדוקי
+  // (למשל كتب=a/u אבל فهم=i/a) ומקורה במילון, לא בקוד. imperativeHamza הוא
+  // פונקציה של root כדי ליישם את כלל ההרמוניה (تنועת u -> המזה בדمة, אחרת
+  // המזה בקسرة). שאר הבניינים (II-X) מתעלמים מהפרמטר הנוסף ואינם מושפעים.
+  // חסר root.pastVowel/presentVowel -> ברירת מחדל 'a' (תואם להתנהגות הישנה).
   // ---------------------------------------------------------------------
   const BINYANIM = [
     {
@@ -74,10 +88,11 @@
       digit: "1",
       name: "בניין 1",
       meaning: "פעולת יסוד",
-      pastBase: (r1, r2, h1, h2) => ({ ar: r1 + FATHA + r2 + FATHA, he: h1 + h2 }),
+      pastBase: (r1, r2, h1, h2, root) => ({ ar: r1 + FATHA + r2 + VOWEL_MARKS[(root && root.pastVowel) || "a"], he: h1 + h2 }),
       presentVowel: "a",
-      presentBase: (r1, r2, h1, h2) => ({ ar: r1 + SUKUN + r2 + FATHA, he: h1 + h2 }),
-      imperativeHamza: { ar: HAMZA_WASL + KASRA, he: "א" },
+      presentBase: (r1, r2, h1, h2, root) => ({ ar: r1 + SUKUN + r2 + VOWEL_MARKS[(root && root.presentVowel) || "a"], he: h1 + h2 }),
+      imperativeHamza: (root) =>
+        (root && root.presentVowel) === "u" ? { ar: HAMZA_WASL + DAMMA, he: "א" } : { ar: HAMZA_WASL + KASRA, he: "א" },
       masdar: null, // תבנית משתנה לפי פועל - אין לנחש, ראה אזהרה במפרט
     },
     {
@@ -312,7 +327,7 @@
   function conjugatePast(root, binyanId, personId) {
     const b = getBinyan(binyanId);
     const { r1, r2, r3, h1, h2, h3 } = rootParts(root);
-    const base = b.pastBase(r1, r2, h1, h2);
+    const base = b.pastBase(r1, r2, h1, h2, root);
     const person = PAST_PERSONS.find((p) => p.id === personId);
     if (!person) throw new Error("גוף לא מוכר: " + personId);
     return normPair({
@@ -325,7 +340,7 @@
   function conjugatePresent(root, binyanId, personId) {
     const b = getBinyan(binyanId);
     const { r1, r2, r3, h1, h2, h3 } = rootParts(root);
-    const base = b.presentBase(r1, r2, h1, h2);
+    const base = b.presentBase(r1, r2, h1, h2, root);
     const vowelMark = b.presentVowel === "u" ? DAMMA : FATHA;
     const person = PRESENT_PERSONS.find((p) => p.id === personId);
     if (!person) throw new Error("גוף לא מוכר: " + personId);
@@ -367,7 +382,7 @@
     }
     const b = getBinyan(binyanId);
     const { r1, r2, r3, h1, h2, h3 } = rootParts(root);
-    const base = b.presentBase(r1, r2, h1, h2);
+    const base = b.presentBase(r1, r2, h1, h2, root);
     const vowelMark = b.presentVowel === "u" ? DAMMA : FATHA;
     const person = PRESENT_PERSONS.find((p) => p.id === personId);
     if (!person) throw new Error("גוף לא מוכר: " + personId);
@@ -384,11 +399,14 @@
   function conjugateImperative(root, binyanId, personId) {
     const b = getBinyan(binyanId);
     const { r1, r2, r3, h1, h2, h3 } = rootParts(root);
-    const base = b.presentBase(r1, r2, h1, h2); // אותו גזע כמו בהווה
+    const base = b.presentBase(r1, r2, h1, h2, root); // אותו גזע כמו בהווה
     const person = IMPERATIVE_PERSONS.find((p) => p.id === personId);
     if (!person) throw new Error("גוף לא מוכר: " + personId);
-    const hamzaAr = b.imperativeHamza ? b.imperativeHamza.ar : "";
-    const hamzaHe = b.imperativeHamza ? b.imperativeHamza.he : "";
+    // imperativeHamza בבניין I הוא פונקציה של root (כלל ההרמוניה); בשאר
+    // הבניינים זהו אובייקט קבוע או null, כפי שהיה עד כה.
+    const hamza = typeof b.imperativeHamza === "function" ? b.imperativeHamza(root) : b.imperativeHamza;
+    const hamzaAr = hamza ? hamza.ar : "";
+    const hamzaHe = hamza ? hamza.he : "";
     return normPair({
       ar: hamzaAr + base.ar + r3 + person.suffix.ar,
       he: hamzaHe + base.he + h3 + person.suffix.he,

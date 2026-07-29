@@ -85,12 +85,21 @@ INFINITIVE_TO_PAST = {
 ws2 = wb["אוצר מילים - פעלים"]
 rows2 = [r for r in ws2.iter_rows(min_row=2, values_only=True) if is_arabic_word(r[0])]
 
+# תנועת ר2 (העין) בבניין 1 היא מידע לקסיקלי לכל שורש בנפרד - אי אפשר לגזור
+# אותה מכלל (למשל كتب=a/u אבל فهم=i/a). לכן נקראת מעמודות E/F בגיליון המקור
+# (לא מנוחשת בקוד המנוע). ראו js/verbEngine.js.
+VALID_VOWELS = {"a", "i", "u"}
+
 verb_roots = []
-for arabic, hebrew, translit, topic in rows2:
+for arabic, hebrew, translit, topic, past_vowel, present_vowel in rows2:
     root_letters = [c for c in arabic.strip() if c not in ("ـ",)]
     assert len(root_letters) == 3, f"Root not triliteral: {arabic!r} -> {root_letters}"
     hebrew_infinitive = hebrew.strip()
     assert hebrew_infinitive in INFINITIVE_TO_PAST, f"Missing past-tense mapping for: {hebrew_infinitive!r}"
+    past_vowel = str(past_vowel).strip()
+    present_vowel = str(present_vowel).strip()
+    assert past_vowel in VALID_VOWELS, f"pastVowel לא תקין עבור {arabic!r}: {past_vowel!r}"
+    assert present_vowel in VALID_VOWELS, f"presentVowel לא תקין עבור {arabic!r}: {present_vowel!r}"
     verb_roots.append({
         "root": arabic.strip(),
         "r1": root_letters[0],
@@ -99,6 +108,8 @@ for arabic, hebrew, translit, topic in rows2:
         "hebrew": INFINITIVE_TO_PAST[hebrew_infinitive],
         "translit": translit.strip(),
         "topic": topic.strip(),
+        "pastVowel": past_vowel,
+        "presentVowel": present_vowel,
     })
 
 assert len(verb_roots) == 40, f"Expected 40 verb roots, got {len(verb_roots)}"
