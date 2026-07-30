@@ -119,13 +119,6 @@
     return array[Math.floor(Math.random() * array.length)];
   }
 
-  // מסיר סימני ניקוד ערביים (U+064B-U+0652: תנוין, תנועות קצרות, סוכון, שדה)
-  // ממחרוזת, כדי שחיפוש בלי ניקוד ימשיך למצוא מילים מנוקדות (data/vocabulary.js).
-  const ARABIC_DIACRITICS_RE = /[ً-ْ]/g;
-  function stripDiacritics(s) {
-    return typeof s === "string" ? s.replace(ARABIC_DIACRITICS_RE, "") : s;
-  }
-
   // -----------------------------------------------------------------
   // ניתוב (Router) מבוסס hash
   // -----------------------------------------------------------------
@@ -280,7 +273,6 @@
     shuffle,
     sample,
     pickOne,
-    stripDiacritics,
     getWordStatus,
     setWordStatus,
     chapterIndices,

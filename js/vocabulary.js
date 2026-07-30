@@ -3,14 +3,7 @@
 
 (function (global) {
   "use strict";
-  const { el, navigate, showToast, shuffle, sample, pickOne, stripDiacritics, getWordStatus, setWordStatus, chapterIndices, chapterProgressPercent, recordQuizResult } = App;
-
-  // ערבית להצגה ללומד: מנוקדת אם קיימת (arabicVoc), אחרת נופל חזרה ל-arabic
-  // הרגיל (פרקים שעדיין לא עברו ניקוד). w.arabic עצמו נשאר תמיד לא-מנוקד -
-  // הוא משמש להשוואות בבוחן ובחיפוש ואסור לדרוס אותו.
-  function displayArabic(w) {
-    return w.arabicVoc || w.arabic;
-  }
+  const { el, navigate, showToast, shuffle, sample, pickOne, getWordStatus, setWordStatus, chapterIndices, chapterProgressPercent, recordQuizResult } = App;
 
   function registerRoutes(route) {
     route("vocab", renderChapterList);
@@ -84,7 +77,7 @@
           {},
           words.map(({ i, w }) =>
             el("tr", {}, [
-              el("td", { class: "ar", lang: "ar" }, [displayArabic(w)]),
+              el("td", { class: "ar", lang: "ar" }, [w.arabic]),
               el("td", { class: "translit" }, [w.translit]),
               el("td", {}, [w.hebrew]),
               el("td", {}, [statusBadge(getWordStatus(i))]),
@@ -172,7 +165,7 @@
       const card = el("div", { class: "flashcard" + (flipped ? " is-flipped" : ""), tabindex: "0", role: "button", "aria-pressed": String(flipped), "aria-label": "לחצו כדי להפוך את הכרטיס" }, [
         el("div", { class: "flashcard__inner" }, [
           el("div", { class: "flashcard__face flashcard__face--front" }, [
-            el("div", { class: "flashcard__arabic", lang: "ar" }, [displayArabic(w)]),
+            el("div", { class: "flashcard__arabic", lang: "ar" }, [w.arabic]),
             el("div", { class: "flashcard__translit" }, [w.translit]),
             el("div", { class: "flashcard__hint" }, ["לחצו להפיכה"]),
           ]),
@@ -307,7 +300,7 @@
       const promptBox =
         q.dir === "ar-he"
           ? el("div", { class: "quiz-prompt" }, [
-              el("div", { class: "quiz-prompt__arabic", lang: "ar" }, [displayArabic(q.word)]),
+              el("div", { class: "quiz-prompt__arabic", lang: "ar" }, [q.word.arabic]),
               el("div", { class: "quiz-prompt__translit" }, [q.word.translit]),
             ])
           : el("div", { class: "quiz-prompt" }, [el("div", { class: "quiz-prompt__hebrew" }, [q.word.hebrew])]);
@@ -316,7 +309,7 @@
 
       const optionsWrap = el("div", { class: "quiz-options" });
       q.options.forEach((opt) => {
-        const label = q.dir === "ar-he" ? opt.hebrew : `${displayArabic(opt)} (${opt.translit})`;
+        const label = q.dir === "ar-he" ? opt.hebrew : `${opt.arabic} (${opt.translit})`;
         const btn = el("button", { class: "quiz-option", lang: q.dir === "ar-he" ? "he" : "ar" }, [label]);
         btn.addEventListener("click", () => selectAnswer(q, opt, btn, optionsWrap));
         optionsWrap.appendChild(btn);
@@ -333,7 +326,7 @@
       if (!correct) {
         Array.from(optionsWrap.children).forEach((child) => {
           const label = child.textContent;
-          const isCorrectLabel = q.dir === "ar-he" ? label === q.word.hebrew : label.startsWith(displayArabic(q.word));
+          const isCorrectLabel = q.dir === "ar-he" ? label === q.word.hebrew : label.startsWith(q.word.arabic);
           if (isCorrectLabel) child.classList.add("is-correct");
         });
       }
@@ -358,11 +351,11 @@
             answers.map((a) =>
               el("li", { class: "quiz-results__item " + (a.correct ? "is-correct" : "is-wrong") }, [
                 el("div", { class: "quiz-results__q", lang: a.q.dir === "ar-he" ? "ar" : "he" }, [
-                  a.q.dir === "ar-he" ? `${displayArabic(a.q.word)} (${a.q.word.translit})` : a.q.word.hebrew,
+                  a.q.dir === "ar-he" ? `${a.q.word.arabic} (${a.q.word.translit})` : a.q.word.hebrew,
                 ]),
-                el("div", { class: "quiz-results__given" }, ["תשובתכם: ", a.q.dir === "ar-he" ? a.chosen.hebrew : `${displayArabic(a.chosen)} (${a.chosen.translit})`]),
+                el("div", { class: "quiz-results__given" }, ["תשובתכם: ", a.q.dir === "ar-he" ? a.chosen.hebrew : `${a.chosen.arabic} (${a.chosen.translit})`]),
                 !a.correct
-                  ? el("div", { class: "quiz-results__correct" }, ["התשובה הנכונה: ", a.q.dir === "ar-he" ? a.q.word.hebrew : `${displayArabic(a.q.word)} (${a.q.word.translit})`])
+                  ? el("div", { class: "quiz-results__correct" }, ["התשובה הנכונה: ", a.q.dir === "ar-he" ? a.q.word.hebrew : `${a.q.word.arabic} (${a.q.word.translit})`])
                   : null,
               ])
             )
@@ -400,11 +393,7 @@
       }
       const q = query.toLowerCase();
       const matches = VOCABULARY.map((w, i) => ({ w, i })).filter(
-        ({ w }) =>
-          w.hebrew.includes(query) ||
-          w.arabic.includes(query) ||
-          (w.arabicVoc && stripDiacritics(w.arabicVoc).includes(query)) ||
-          w.translit.toLowerCase().includes(q)
+        ({ w }) => w.hebrew.includes(query) || w.arabic.includes(query) || w.translit.toLowerCase().includes(q)
       );
       if (!matches.length) {
         resultsWrap.appendChild(el("p", { class: "search-hint" }, ["לא נמצאו תוצאות."]));
@@ -417,7 +406,7 @@
           {},
           matches.slice(0, 100).map(({ w }) =>
             el("tr", {}, [
-              el("td", { class: "ar", lang: "ar" }, [displayArabic(w)]),
+              el("td", { class: "ar", lang: "ar" }, [w.arabic]),
               el("td", { class: "translit" }, [w.translit]),
               el("td", {}, [w.hebrew]),
               el("td", {}, [el("a", { href: `#/vocab/${w.chapter}` }, [`פרק ${w.chapter}`])]),
