@@ -15,13 +15,18 @@ wb = openpyxl.load_workbook(SRC, data_only=True)
 ws = wb["אוצר מילים כללי"]
 rows = [r for r in ws.iter_rows(min_row=2, values_only=True) if isinstance(r[0], int)]
 
+# עמודה F ("מילה מנוקדת") ממולאת בהדרגה, פרק אחרי פרק - ראו הקונבנציה
+# המתועדת בכותרת data/vocabulary.js. כל עוד פרק מסוים עדיין לא מנוקד,
+# arabicVoc יוצא None עבור מילותיו, ו-js/vocabulary.js נופל חזרה ל-arabic
+# הרגיל לתצוגה - כך שהאתר ממשיך לעבוד תקין באמצע התהליך ההדרגתי.
 chapter_titles = {}
 vocabulary = []
-for chapter_num, chapter_title, arabic, hebrew, translit in rows:
+for chapter_num, chapter_title, arabic, hebrew, translit, arabic_voc in rows:
     chapter_titles.setdefault(chapter_num, chapter_title)
     vocabulary.append({
         "chapter": chapter_num,
         "arabic": arabic.strip(),
+        "arabicVoc": arabic_voc.strip() if isinstance(arabic_voc, str) and arabic_voc.strip() else None,
         "hebrew": hebrew.strip(),
         "translit": translit.strip(),
     })
@@ -116,7 +121,29 @@ assert len(verb_roots) == 40, f"Expected 40 verb roots, got {len(verb_roots)}"
 
 with open("data/vocabulary.js", "w", encoding="utf-8") as f:
     f.write("// קובץ נוצר אוטומטית מתוך אוצר_מילים_ערבית.xlsx על ידי scripts/convert_xlsx_to_js.py\n")
-    f.write("// אל תערוך ידנית - ערוך את קובץ המקור והרץ מחדש את הסקריפט.\n\n")
+    f.write("// אל תערוך ידנית - ערוך את קובץ המקור והרץ מחדש את הסקריפט.\n")
+    f.write("//\n")
+    f.write("// arabic: הכתיב הערבי הרגיל (ללא ניקוד) - לשימוש פנימי בלבד (השוואות\n")
+    f.write("//   בבוחן ובחיפוש). לעולם לא לדרוס ולא להציג ללומד.\n")
+    f.write("// arabicVoc: אותה מילה מנוקדת - להצגה בכל מקום שבו מוצגת מילה ללומד\n")
+    f.write("//   (כרטיסיות, טבלת פרק, בוחן, תוצאות בוחן, חיפוש). null אם הפרק\n")
+    f.write("//   עדיין לא עבר ניקוד (בעבודה הדרגתית, פרק-פרק).\n")
+    f.write("//\n")
+    f.write("// קונבנציית ניקוד (arabicVoc):\n")
+    f.write("// - ניקוד פנימי מלא (פתחה/דמה/כסרה/סוכון/שדה) על כל אות.\n")
+    f.write("// - בלי סימן יחסה סופי (צורת הפסק): كِتَاب ולא كِتَابٌ.\n")
+    f.write("//   יוצא דופן: ביטויים שהתאבנו כתוארי-פועל שומרים על התנוין -\n")
+    f.write("//   مَرْحَبًا، شُكْرًا، عَفْوًا، وَدَاعًا، أَهْلًا (וכיו\"ב).\n")
+    f.write("// - כינוי חבור מחובר (למשל ـكَ / ـِي / ـهُ) שומר על תנועת החיבור שלו\n")
+    f.write("//   במלואה - היא לא יחסה סופית להסרה: اسْمُكَ، حَالُكَ.\n")
+    f.write("// - בביטוי רב-מילים, רק המילה האחרונה מאבדת את היחסה שלה; מילים\n")
+    f.write("//   פנימיות (סמיכות/מוגדר ע\"י מילת יחס) שומרות על תנועת החיבור:\n")
+    f.write("//   صَبَاحُ الْخَير.\n")
+    f.write("// - המזה המחברת (همزة الوصل, כמו ב-اسم או ال הידוע) מסומנת בתנועת\n")
+    f.write("//   עזר לקריאות - כסרה כברירת מחדל, פתחה ל-\"ال\" הידוע בתחילת הביטוי;\n")
+    f.write("//   לא מסומנת כשמילה קודמת בתוך אותו ביטוי כבר מתחברת אליה.\n")
+    f.write("// - אל הידוע לפני אות שמשית: הלמ\"ד ללא סימן (בולעת/מיטמעת), שד\"ה על\n")
+    f.write("//   האות השמשית שאחריה; לפני אות ירחית: ל' מקבלת סוכון כרגיל.\n\n")
     f.write("const VOCAB_CHAPTERS = ")
     f.write(json.dumps(chapters, ensure_ascii=False, indent=2))
     f.write(";\n\n")
