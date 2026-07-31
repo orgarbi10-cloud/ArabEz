@@ -1,9 +1,10 @@
-// פיצ'ר אוצר מילים: רשימת פרקים, כרטיסיות לימוד, תרגול/בוחן וחיפוש חופשי.
-// כל הנתונים מגיעים מ-data/vocabulary.js (VOCAB_CHAPTERS, VOCABULARY).
+// פיצ'ר אוצר מילים: רשימת פרקים -> רשימת חלקים בתוך כל פרק -> כרטיסיות
+// לימוד/תרגול/בוחן וחיפוש חופשי. כל הנתונים מגיעים מ-data/vocabulary.js
+// (VOCAB_CHAPTERS עם parts מקוננים, VOCABULARY עם chapter+part לכל מילה).
 
 (function (global) {
   "use strict";
-  const { el, navigate, showToast, shuffle, sample, pickOne, getWordStatus, setWordStatus, chapterIndices, chapterProgressPercent, recordQuizResult, stripDiacritics } = App;
+  const { el, navigate, showToast, shuffle, sample, pickOne, getWordStatus, setWordStatus, chapterIndices, chapterProgressPercent, partIndices, partProgressPercent, recordQuizResult, stripDiacritics } = App;
 
   // w.arabic הוא ללא ניקוד (להשוואות בוחן/חיפוש בלבד) - לתצוגה תמיד מציגים
   // את arabicVoc כשקיים (מנוקד), ונופלים חזרה ל-arabic אם לא.
@@ -11,8 +12,7 @@
     return w.arabicVoc || w.arabic;
   }
 
-  // "מילה (תעתיק)" - התעתיק מוצג רק כשקיים (translit הוא null כרגע לכל 1,130
-  // המילים החדשות).
+  // "מילה (תעתיק)" - התעתיק מוצג רק כשקיים.
   function arabicLabel(w) {
     return w.translit ? `${displayArabic(w)} (${w.translit})` : displayArabic(w);
   }
@@ -35,17 +35,33 @@
     return badges.length ? el("div", { class: "detail-badges" }, badges) : null;
   }
 
-  function chapterTitleOf(num) {
-    const c = VOCAB_CHAPTERS.find((c) => c.num === num);
-    return c ? c.title : `#${num}`;
+  function findChapter(num) {
+    return VOCAB_CHAPTERS.find((c) => c.num === num);
+  }
+
+  function findPart(chapter, partNum) {
+    return chapter && chapter.parts.find((p) => p.num === partNum);
+  }
+
+  // מציג רק את האות עצמה מתוך "חלק א'" (ללא המילה "חלק") - לשימוש בתג העגול.
+  function partLetter(part) {
+    return part.title.replace(/^חלק\s*/, "");
+  }
+
+  function chapterPartTitleOf(chapterNum, partNum) {
+    const chapter = findChapter(chapterNum);
+    const part = findPart(chapter, partNum);
+    if (!chapter || !part) return `#${chapterNum}/${partNum}`;
+    return `${chapter.title} · ${part.title}`;
   }
 
   function registerRoutes(route) {
     route("vocab", renderChapterList);
-    route("vocab/:num", renderChapterHub);
-    route("vocab/:num/flashcards", renderFlashcards);
-    route("vocab/:num/quiz", renderQuizSetup);
-    route("vocab/:num/quiz/:direction/:length", renderQuizRun);
+    route("vocab/:num", renderPartList);
+    route("vocab/:num/:part", renderPartHub);
+    route("vocab/:num/:part/flashcards", renderFlashcards);
+    route("vocab/:num/:part/quiz", renderQuizSetup);
+    route("vocab/:num/:part/quiz/:direction/:length", renderQuizRun);
     route("search", renderSearch);
   }
 
@@ -55,7 +71,7 @@
   function renderChapterList() {
     const grid = el("div", { class: "chapter-grid" }, VOCAB_CHAPTERS.map(chapterCard));
     return el("div", { class: "view view--vocab" }, [
-      pageHeader("אוצר מילים", "בחרו חלק להתחלת הלימוד."),
+      pageHeader("אוצר מילים", "בחרו פרק להתחלת הלימוד."),
       grid,
     ]);
   }
@@ -65,7 +81,7 @@
     const pct = chapterProgressPercent(chapter.num);
     return el("a", { class: "chapter-card", href: `#/vocab/${chapter.num}` }, [
       el("h3", { class: "chapter-card__title" }, [chapter.title]),
-      el("div", { class: "chapter-card__meta" }, [`${count} מילים`]),
+      el("div", { class: "chapter-card__meta" }, [`${count} מילים · ${chapter.parts.length} חלקים`]),
       progressBar(pct),
     ]);
   }
@@ -78,25 +94,58 @@
   }
 
   // -------------------------------------------------------------
-  // עמוד פרק (בחירת מצב)
+  // רשימת חלקים בתוך פרק
   // -------------------------------------------------------------
-  function renderChapterHub(params) {
+  function renderPartList(params) {
     const num = Number(params.num);
-    const chapter = VOCAB_CHAPTERS.find((c) => c.num === num);
+    const chapter = findChapter(num);
     if (!chapter) return notFound();
-    const words = chapterIndices(num).map((i) => ({ i, w: VOCABULARY[i] }));
-    const pct = chapterProgressPercent(num);
+    const grid = el("div", { class: "chapter-grid" }, chapter.parts.map((part) => partCard(chapter, part)));
+    return el("div", { class: "view view--vocab" }, [
+      pageHeader(chapter.title, "בחרו חלק להתחלת הלימוד - החלקים מסודרים מהקל לקשה.", "#/vocab"),
+      grid,
+    ]);
+  }
+
+  function partCard(chapter, part) {
+    const count = partIndices(chapter.num, part.num).length;
+    const pct = partProgressPercent(chapter.num, part.num);
+    const dots = el(
+      "div",
+      { class: "part-card__difficulty", "aria-hidden": "true" },
+      [1, 2, 3, 4, 5].map((n) => el("span", { class: n <= part.num ? "is-filled" : "" }, []))
+    );
+    return el("a", { class: "chapter-card", href: `#/vocab/${chapter.num}/${part.num}` }, [
+      el("div", { class: "part-card__badge" }, [partLetter(part)]),
+      dots,
+      el("h3", { class: "chapter-card__title" }, [part.title]),
+      el("div", { class: "chapter-card__meta" }, [`${count} מילים`]),
+      progressBar(pct),
+    ]);
+  }
+
+  // -------------------------------------------------------------
+  // עמוד חלק (בחירת מצב)
+  // -------------------------------------------------------------
+  function renderPartHub(params) {
+    const num = Number(params.num);
+    const partNum = Number(params.part);
+    const chapter = findChapter(num);
+    const part = findPart(chapter, partNum);
+    if (!chapter || !part) return notFound();
+    const words = partIndices(num, partNum).map((i) => ({ i, w: VOCABULARY[i] }));
+    const pct = partProgressPercent(num, partNum);
 
     return el("div", { class: "view view--chapter-hub" }, [
-      pageHeader(chapter.title, `${words.length} מילים בחלק זה.`, "#/vocab"),
+      pageHeader(`${chapter.title} · ${part.title}`, `${words.length} מילים בחלק זה.`, `#/vocab/${num}`),
       progressBar(pct),
       el("div", { class: "mode-cards" }, [
-        el("a", { class: "mode-card", href: `#/vocab/${num}/flashcards` }, [
+        el("a", { class: "mode-card", href: `#/vocab/${num}/${partNum}/flashcards` }, [
           el("div", { class: "mode-card__icon", "aria-hidden": "true" }, ["🗂️"]),
           el("h3", {}, ["כרטיסיות לימוד"]),
           el("p", {}, ["הפכו כל כרטיס לחשיפת התרגום, וסמנו ידעתי/לא ידעתי."]),
         ]),
-        el("a", { class: "mode-card", href: `#/vocab/${num}/quiz` }, [
+        el("a", { class: "mode-card", href: `#/vocab/${num}/${partNum}/quiz` }, [
           el("div", { class: "mode-card__icon", "aria-hidden": "true" }, ["📝"]),
           el("h3", {}, ["תרגול / בוחן"]),
           el("p", {}, ["שאלות ברירה מרובה ערבית↔עברית, עם ציון בסוף."]),
@@ -136,9 +185,13 @@
   // -------------------------------------------------------------
   function renderFlashcards(params) {
     const num = Number(params.num);
-    const chapter = VOCAB_CHAPTERS.find((c) => c.num === num);
-    if (!chapter) return notFound();
-    const order = shuffle(chapterIndices(num));
+    const partNum = Number(params.part);
+    const chapter = findChapter(num);
+    const part = findPart(chapter, partNum);
+    if (!chapter || !part) return notFound();
+    const hubHref = `#/vocab/${num}/${partNum}`;
+    const partTitle = `${chapter.title} · ${part.title}`;
+    const order = shuffle(partIndices(num, partNum));
     let pos = 0;
     let flipped = false;
     let knownCount = 0;
@@ -146,7 +199,7 @@
     const container = el("div", { class: "view view--flashcards" });
     render();
 
-    // ניווט בין כרטיסיות בעזרת חצי המקלדת (ArrowLeft/ArrowRight), בכל פרקי
+    // ניווט בין כרטיסיות בעזרת חצי המקלדת (ArrowLeft/ArrowRight), בכל חלקי
     // אוצר המילים. הניווט הוא עיון חופשי בלבד - אינו מסמן ידעתי/לא ידעתי.
     function onKeydown(e) {
       if (!container.isConnected) {
@@ -178,13 +231,13 @@
       if (pos >= order.length) {
         container.appendChild(
           el("div", { class: "flash-done" }, [
-            pageHeader(chapter.title, "", `#/vocab/${num}`),
+            pageHeader(partTitle, "", hubHref),
             el("div", { class: "flash-done__box" }, [
               el("h2", {}, ["סיימתם את החלק! 🎉"]),
               el("p", {}, [`סימנתם "ידעתי" ב-${knownCount} מתוך ${order.length} מילים.`]),
               el("div", { class: "actions" }, [
-                el("button", { class: "btn btn--primary", onClick: () => { order.splice(0, order.length, ...shuffle(chapterIndices(num))); pos = 0; knownCount = 0; render(); } }, ["לשחק שוב"]),
-                el("a", { class: "btn", href: `#/vocab/${num}` }, ["חזרה לחלק"]),
+                el("button", { class: "btn btn--primary", onClick: () => { order.splice(0, order.length, ...shuffle(partIndices(num, partNum))); pos = 0; knownCount = 0; render(); } }, ["לשחק שוב"]),
+                el("a", { class: "btn", href: hubHref }, ["חזרה לחלק"]),
               ]),
             ]),
           ])
@@ -196,7 +249,7 @@
       const w = VOCABULARY[idx];
       const pct = Math.round((pos / order.length) * 100);
 
-      container.appendChild(pageHeader(chapter.title, `כרטיס ${pos + 1} מתוך ${order.length}`, `#/vocab/${num}`));
+      container.appendChild(pageHeader(partTitle, `כרטיס ${pos + 1} מתוך ${order.length}`, hubHref));
       container.appendChild(progressBar(pct));
 
       const card = el("div", { class: "flashcard" + (flipped ? " is-flipped" : ""), tabindex: "0", role: "button", "aria-pressed": String(flipped), "aria-label": "לחצו כדי להפוך את הכרטיס" }, [
@@ -260,16 +313,15 @@
   // -------------------------------------------------------------
   function renderQuizSetup(params) {
     const num = Number(params.num);
-    const chapter = VOCAB_CHAPTERS.find((c) => c.num === num);
-    if (!chapter) return notFound();
-    const words = chapterIndices(num);
+    const partNum = Number(params.part);
+    const chapter = findChapter(num);
+    const part = findPart(chapter, partNum);
+    if (!chapter || !part) return notFound();
+    const words = partIndices(num, partNum);
     const maxLen = words.length;
 
-    let direction = "mixed";
-    let length = Math.min(10, maxLen);
-
     const container = el("div", { class: "view view--quiz-setup" }, [
-      pageHeader(chapter.title, "הגדירו את הבוחן", `#/vocab/${num}`),
+      pageHeader(`${chapter.title} · ${part.title}`, "הגדירו את הבוחן", `#/vocab/${num}/${partNum}`),
       el("div", { class: "quiz-setup-form" }, [
         formGroup("כיוון השאלות", [
           radioBtn("direction", "mixed", "מעורב", true),
@@ -283,7 +335,7 @@
           onClick: () => {
             const dir = container.querySelector('input[name="direction"]:checked').value;
             const len = container.querySelector('input[name="length"]:checked').value;
-            navigate(`#/vocab/${num}/quiz/${dir}/${len}`);
+            navigate(`#/vocab/${num}/${partNum}/quiz/${dir}/${len}`);
           },
         }, ["התחילו את הבוחן"]),
       ]),
@@ -305,9 +357,13 @@
 
   function renderQuizRun(params) {
     const num = Number(params.num);
-    const chapter = VOCAB_CHAPTERS.find((c) => c.num === num);
-    if (!chapter) return notFound();
-    const wordIndices = chapterIndices(num);
+    const partNum = Number(params.part);
+    const chapter = findChapter(num);
+    const part = findPart(chapter, partNum);
+    if (!chapter || !part) return notFound();
+    const partTitle = `${chapter.title} · ${part.title}`;
+    const hubHref = `#/vocab/${num}/${partNum}`;
+    const wordIndices = partIndices(num, partNum);
     const length = Math.min(Number(params.length) || 10, wordIndices.length);
     const chosen = sample(wordIndices, length);
 
@@ -332,7 +388,7 @@
         return showResults();
       }
       const q = questions[qPos];
-      container.appendChild(pageHeader(chapter.title, `שאלה ${qPos + 1} מתוך ${questions.length}`, `#/vocab/${num}`));
+      container.appendChild(pageHeader(partTitle, `שאלה ${qPos + 1} מתוך ${questions.length}`, hubHref));
       container.appendChild(progressBar(Math.round((qPos / questions.length) * 100)));
 
       const promptBox =
@@ -378,10 +434,10 @@
     function showResults() {
       const score = answers.filter((a) => a.correct).length;
       const pct = Math.round((score / answers.length) * 100);
-      recordQuizResult({ type: "vocab-quiz", chapter: num, length: answers.length, score, pct });
+      recordQuizResult({ type: "vocab-quiz", chapter: num, part: partNum, length: answers.length, score, pct });
       container.appendChild(
         el("div", { class: "quiz-results" }, [
-          pageHeader(chapter.title, "תוצאות הבוחן", `#/vocab/${num}`),
+          pageHeader(partTitle, "תוצאות הבוחן", hubHref),
           el("div", { class: "quiz-results__score" }, [el("bdi", { dir: "ltr" }, [`${score} / ${answers.length}`]), el("span", {}, [`(${pct}%)`])]),
           el(
             "ol",
@@ -399,8 +455,8 @@
             )
           ),
           el("div", { class: "actions" }, [
-            el("a", { class: "btn btn--primary", href: `#/vocab/${num}/quiz` }, ["בוחן חדש"]),
-            el("a", { class: "btn", href: `#/vocab/${num}` }, ["חזרה לחלק"]),
+            el("a", { class: "btn btn--primary", href: `#/vocab/${num}/${partNum}/quiz` }, ["בוחן חדש"]),
+            el("a", { class: "btn", href: hubHref }, ["חזרה לחלק"]),
           ]),
         ])
       );
@@ -439,7 +495,7 @@
         return;
       }
       const table = el("table", { class: "word-table" }, [
-        el("thead", {}, [el("tr", {}, [el("th", {}, ["ערבית"]), el("th", {}, ["תעתיק"]), el("th", {}, ["עברית"]), el("th", {}, ["חלק"])])]),
+        el("thead", {}, [el("tr", {}, [el("th", {}, ["ערבית"]), el("th", {}, ["תעתיק"]), el("th", {}, ["עברית"]), el("th", {}, ["פרק / חלק"])])]),
         el(
           "tbody",
           {},
@@ -451,7 +507,7 @@
               ]),
               el("td", { class: "translit" }, [w.translit || ""]),
               el("td", {}, [w.hebrew]),
-              el("td", {}, [el("a", { href: `#/vocab/${w.chapter}` }, [chapterTitleOf(w.chapter)])]),
+              el("td", {}, [el("a", { href: `#/vocab/${w.chapter}/${w.part}` }, [chapterPartTitleOf(w.chapter, w.part)])]),
             ])
           )
         ),
@@ -473,7 +529,7 @@
   }
 
   function notFound() {
-    return el("div", { class: "view" }, [el("h1", {}, ["החלק לא נמצא"]), el("a", { href: "#/vocab" }, ["חזרה לרשימת החלקים"])]);
+    return el("div", { class: "view" }, [el("h1", {}, ["החלק לא נמצא"]), el("a", { href: "#/vocab" }, ["חזרה לרשימת הפרקים"])]);
   }
 
   global.Vocabulary = { registerRoutes };

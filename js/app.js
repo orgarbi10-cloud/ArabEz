@@ -59,6 +59,21 @@
     return Math.round((known / indices.length) * 100);
   }
 
+  function partIndices(chapterNum, partNum) {
+    const indices = [];
+    VOCABULARY.forEach((w, i) => {
+      if (w.chapter === chapterNum && w.part === partNum) indices.push(i);
+    });
+    return indices;
+  }
+
+  function partProgressPercent(chapterNum, partNum) {
+    const indices = partIndices(chapterNum, partNum);
+    if (!indices.length) return 0;
+    const known = indices.filter((i) => getWordStatus(i) === "known").length;
+    return Math.round((known / indices.length) * 100);
+  }
+
   function recordQuizResult(entry) {
     progressCache.quizHistory.unshift(Object.assign({ date: new Date().toISOString() }, entry));
     progressCache.quizHistory = progressCache.quizHistory.slice(0, 30);
@@ -254,7 +269,7 @@
       ]),
 
       el("section", { class: "home-cards" }, [
-        homeCard("#/vocab", "📖", "אוצר מילים", `כרטיסיות, בוחנים וחיפוש על ${VOCABULARY.length} מילים ב-${VOCAB_CHAPTERS.length} חלקים.`, `${overallPct}% נלמדו`),
+        homeCard("#/vocab", "📖", "אוצר מילים", `כרטיסיות, בוחנים וחיפוש על ${VOCABULARY.length} מילים ב-${VOCAB_CHAPTERS.length} פרקים.`, `${overallPct}% נלמדו`),
         homeCard("#/verbs", "🔤", "תרגול פעלים", "זהה או בנה צורות פועל בכל הבניינים, על סמך מנוע כללים מדויק."),
         homeCard("#/grammar", "📚", "חוקי השפה", "עמוד עיון: כל בניין עם תבנית מלאה וטבלת נטייה לכל הגופים."),
         homeCard("#/search", "🔎", "חיפוש חופשי", "חפשו מילה לפי עברית, ערבית או תעתיק."),
@@ -283,6 +298,8 @@
     setWordStatus,
     chapterIndices,
     chapterProgressPercent,
+    partIndices,
+    partProgressPercent,
     recordQuizResult,
     recentQuizHistory,
     stripDiacritics,

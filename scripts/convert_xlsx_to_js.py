@@ -12,10 +12,13 @@ SRC = "אוצר_מילים_ערבית.xlsx"
 wb = openpyxl.load_workbook(SRC, data_only=True)
 
 # --- גיליון 1: אוצר מילים כללי ---
-# מאגר המילים הרשמי של משרד החינוך (כיתות ז'-י"ב), מחולק ל-6 "חלקים" לפי
-# רמת קושי מצטברת (חלק א' = לשעבר כיתה ז', וכן הלאה) - לא לפי נושא כמו
-# האוצ"מ הקודם. עמודות אופציונליות (תעתיק/ריבוי/עתיד/מין/מושא/מענה) עשויות
-# להיות ריקות לחלק מהמילים; מטופלות בעדינות (None/מחרוזת ריקה) ולא כשגיאה.
+# מאגר המילים הרשמי של משרד החינוך (כיתות ז'-י"ב), מחולק ל-6 "פרקים" לפי
+# רמת קושי מצטברת (פרק א' = לשעבר כיתה ז', וכן הלאה) - לא לפי נושא כמו
+# האוצ"מ הקודם. בתוך כל פרק המילים מחולקות ל-5 "חלקים" (א'-ה', כ-30-45 מילים
+# כל אחד) לפי רמת קושי יחסית + הקשר משמעות, כדי שלא יהיו מאות מילים ללימוד
+# בבת אחת - בלי לערבב מילים בין פרקים שונים. עמודות אופציונליות (תעתיק/ריבוי/
+# עתיד/מין/מושא/מענה) עשויות להיות ריקות לחלק מהמילים; מטופלות בעדינות
+# (None/מחרוזת ריקה) ולא כשגיאה.
 ws = wb["אוצר מילים כללי"]
 rows = [r for r in ws.iter_rows(min_row=2, values_only=True) if isinstance(r[0], int)]
 
@@ -24,12 +27,15 @@ def blank_to_none(v):
     return v or None
 
 chapter_titles = {}
+part_titles = {}  # (chapter_num, part_num) -> part_title
 vocabulary = []
-for (part_num, part_title, arabic, hebrew, translit, arabic_voc,
-     plural, verb_present, gender, transitive, response) in rows:
-    chapter_titles.setdefault(part_num, part_title)
+for (chapter_num, chapter_title, part_num, part_title, arabic, hebrew, translit,
+     arabic_voc, plural, verb_present, gender, transitive, response) in rows:
+    chapter_titles.setdefault(chapter_num, chapter_title)
+    part_titles.setdefault((chapter_num, part_num), part_title)
     word = {
-        "chapter": part_num,
+        "chapter": chapter_num,
+        "part": part_num,
         "arabic": arabic.strip(),
         "arabicVoc": blank_to_none(arabic_voc),
         "hebrew": hebrew.strip(),
@@ -47,9 +53,20 @@ for (part_num, part_title, arabic, hebrew, translit, arabic_voc,
     vocabulary.append(word)
 
 assert len(vocabulary) == 1129, f"Expected 1129 words, got {len(vocabulary)}"
-assert len(chapter_titles) == 6, f"Expected 6 parts, got {len(chapter_titles)}"
+assert len(chapter_titles) == 6, f"Expected 6 chapters, got {len(chapter_titles)}"
+assert len(part_titles) == 30, f"Expected 30 chapter/part combos, got {len(part_titles)}"
 
-chapters = [{"num": n, "title": chapter_titles[n]} for n in sorted(chapter_titles)]
+chapters = [
+    {
+        "num": cn,
+        "title": chapter_titles[cn],
+        "parts": [
+            {"num": pn, "title": part_titles[(cn, pn)]}
+            for pn in sorted(pn for (ccn, pn) in part_titles if ccn == cn)
+        ],
+    }
+    for cn in sorted(chapter_titles)
+]
 
 # --- גיליון 2: אוצר מילים - פעלים ---
 def is_arabic_word(s):
@@ -139,8 +156,11 @@ with open("data/vocabulary.js", "w", encoding="utf-8") as f:
     f.write("// אל תערוך ידנית - ערוך את קובץ המקור והרץ מחדש את הסקריפט.\n")
     f.write("//\n")
     f.write("// מקור: מאגר המילים הרשמי של משרד החינוך (כיתות ז'-י\"ב, הפיקוח על הוראת\n")
-    f.write("// ערבית, מאי 2015). VOCAB_CHAPTERS מחולק ל-6 \"חלקים\" (א'-ו') לפי רמת קושי\n")
-    f.write("// מצטברת - לא לפי נושא. arabic הוא הכתיב הרגיל (ללא ניקוד, לשימוש פנימי\n")
+    f.write("// ערבית, מאי 2015). VOCAB_CHAPTERS מחולק ל-6 \"פרקים\" (א'-ו') לפי רמת קושי\n")
+    f.write("// מצטברת - לא לפי נושא. כל פרק מחולק בתוכו ל-5 \"חלקים\" (parts, א'-ה')\n")
+    f.write("// לפי רמת קושי יחסית + הקשר/משמעות, כדי לא להעמיס מאות מילים בבת אחת -\n")
+    f.write("// בלי לערבב מילים בין פרקים. VOCABULARY word.chapter/word.part מצביעים\n")
+    f.write("// לתוך VOCAB_CHAPTERS[].parts[]. arabic הוא הכתיב הרגיל (ללא ניקוד, לשימוש פנימי\n")
     f.write("// בהשוואות בבוחן ובחיפוש בלבד); arabicVoc הוא הניקוד המלא כפי שסופק במקור\n")
     f.write("// (לא ניקוד ידני שלנו הפעם). translit הוא תעתיק עברי מכני אות-באות (ללא\n")
     f.write("// סימון תנועות קצרות) לפי טבלת התאמה קבועה - ראו scripts/README/היסטוריית\n")
