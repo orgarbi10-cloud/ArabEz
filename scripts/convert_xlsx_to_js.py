@@ -46,7 +46,7 @@ for (part_num, part_title, arabic, hebrew, translit, arabic_voc,
     if response: word["response"] = response
     vocabulary.append(word)
 
-assert len(vocabulary) == 1130, f"Expected 1130 words, got {len(vocabulary)}"
+assert len(vocabulary) == 1129, f"Expected 1129 words, got {len(vocabulary)}"
 assert len(chapter_titles) == 6, f"Expected 6 parts, got {len(chapter_titles)}"
 
 chapters = [{"num": n, "title": chapter_titles[n]} for n in sorted(chapter_titles)]
