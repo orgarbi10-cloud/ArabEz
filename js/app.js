@@ -119,6 +119,12 @@
     return array[Math.floor(Math.random() * array.length)];
   }
 
+  // מסיר ניקוד ערבי (U+064B-U+0652) לצורך השוואות/חיפוש חסיני-ניקוד.
+  const ARABIC_DIACRITICS_RE = /[ً-ْ]/g;
+  function stripDiacritics(s) {
+    return typeof s === "string" ? s.replace(ARABIC_DIACRITICS_RE, "") : s;
+  }
+
   // -----------------------------------------------------------------
   // ניתוב (Router) מבוסס hash
   // -----------------------------------------------------------------
@@ -248,7 +254,7 @@
       ]),
 
       el("section", { class: "home-cards" }, [
-        homeCard("#/vocab", "📖", "אוצר מילים", "כרטיסיות, בוחנים וחיפוש על 400 מילים ב-10 פרקים.", `${overallPct}% נלמדו`),
+        homeCard("#/vocab", "📖", "אוצר מילים", `כרטיסיות, בוחנים וחיפוש על ${VOCABULARY.length} מילים ב-${VOCAB_CHAPTERS.length} חלקים.`, `${overallPct}% נלמדו`),
         homeCard("#/verbs", "🔤", "תרגול פעלים", "זהה או בנה צורות פועל בכל הבניינים, על סמך מנוע כללים מדויק."),
         homeCard("#/grammar", "📚", "חוקי השפה", "עמוד עיון: כל בניין עם תבנית מלאה וטבלת נטייה לכל הגופים."),
         homeCard("#/search", "🔎", "חיפוש חופשי", "חפשו מילה לפי עברית, ערבית או תעתיק."),
@@ -279,6 +285,7 @@
     chapterProgressPercent,
     recordQuizResult,
     recentQuizHistory,
+    stripDiacritics,
   };
 
   document.addEventListener("DOMContentLoaded", init);

@@ -3,7 +3,42 @@
 
 (function (global) {
   "use strict";
-  const { el, navigate, showToast, shuffle, sample, pickOne, getWordStatus, setWordStatus, chapterIndices, chapterProgressPercent, recordQuizResult } = App;
+  const { el, navigate, showToast, shuffle, sample, pickOne, getWordStatus, setWordStatus, chapterIndices, chapterProgressPercent, recordQuizResult, stripDiacritics } = App;
+
+  // w.arabic הוא ללא ניקוד (להשוואות בוחן/חיפוש בלבד) - לתצוגה תמיד מציגים
+  // את arabicVoc כשקיים (מנוקד), ונופלים חזרה ל-arabic אם לא.
+  function displayArabic(w) {
+    return w.arabicVoc || w.arabic;
+  }
+
+  // "מילה (תעתיק)" - התעתיק מוצג רק כשקיים (translit הוא null כרגע לכל 1,130
+  // המילים החדשות).
+  function arabicLabel(w) {
+    return w.translit ? `${displayArabic(w)} (${w.translit})` : displayArabic(w);
+  }
+
+  // תגיות פרטים דקדוקיים אופציונליים (ריבוי/עתיד/מין/מושא/מענה) - כל שדה
+  // מוצג רק כשקיים במקור.
+  function detailBadges(w) {
+    const badges = [];
+    const arSpan = (text) => el("span", { lang: "ar", class: "detail-badge__ar" }, [text]);
+    if (w.gender) badges.push(el("span", { class: "badge" }, [`מין: ${w.gender}`]));
+    if (w.plural) badges.push(el("span", { class: "badge" }, ["ריבוי: ", arSpan(w.plural)]));
+    if (w.verbPresent) badges.push(el("span", { class: "badge" }, ["עתיד: ", arSpan(w.verbPresent)]));
+    if (w.transitive) badges.push(el("span", { class: "badge" }, ["דורש מושא"]));
+    if (w.response) badges.push(el("span", { class: "badge" }, ["מענה: ", arSpan(w.response)]));
+    return badges;
+  }
+
+  function detailBadgesRow(w) {
+    const badges = detailBadges(w);
+    return badges.length ? el("div", { class: "detail-badges" }, badges) : null;
+  }
+
+  function chapterTitleOf(num) {
+    const c = VOCAB_CHAPTERS.find((c) => c.num === num);
+    return c ? c.title : `#${num}`;
+  }
 
   function registerRoutes(route) {
     route("vocab", renderChapterList);
@@ -20,7 +55,7 @@
   function renderChapterList() {
     const grid = el("div", { class: "chapter-grid" }, VOCAB_CHAPTERS.map(chapterCard));
     return el("div", { class: "view view--vocab" }, [
-      pageHeader("אוצר מילים", "בחרו פרק להתחלת הלימוד — 40 מילים בכל פרק."),
+      pageHeader("אוצר מילים", "בחרו חלק להתחלת הלימוד."),
       grid,
     ]);
   }
@@ -29,8 +64,7 @@
     const count = chapterIndices(chapter.num).length;
     const pct = chapterProgressPercent(chapter.num);
     return el("a", { class: "chapter-card", href: `#/vocab/${chapter.num}` }, [
-      el("div", { class: "chapter-card__num" }, [`פרק ${chapter.num}`]),
-      el("h3", { class: "chapter-card__title" }, [chapter.title.replace(/^פרק \d+:\s*/, "")]),
+      el("h3", { class: "chapter-card__title" }, [chapter.title]),
       el("div", { class: "chapter-card__meta" }, [`${count} מילים`]),
       progressBar(pct),
     ]);
@@ -54,7 +88,7 @@
     const pct = chapterProgressPercent(num);
 
     return el("div", { class: "view view--chapter-hub" }, [
-      pageHeader(chapter.title, `${words.length} מילים בפרק זה.`, "#/vocab"),
+      pageHeader(chapter.title, `${words.length} מילים בחלק זה.`, "#/vocab"),
       progressBar(pct),
       el("div", { class: "mode-cards" }, [
         el("a", { class: "mode-card", href: `#/vocab/${num}/flashcards` }, [
@@ -77,8 +111,11 @@
           {},
           words.map(({ i, w }) =>
             el("tr", {}, [
-              el("td", { class: "ar", lang: "ar" }, [w.arabic]),
-              el("td", { class: "translit" }, [w.translit]),
+              el("td", { class: "ar" }, [
+                el("span", { lang: "ar" }, [displayArabic(w)]),
+                detailBadgesRow(w),
+              ]),
+              el("td", { class: "translit" }, [w.translit || ""]),
               el("td", {}, [w.hebrew]),
               el("td", {}, [statusBadge(getWordStatus(i))]),
             ])
@@ -143,11 +180,11 @@
           el("div", { class: "flash-done" }, [
             pageHeader(chapter.title, "", `#/vocab/${num}`),
             el("div", { class: "flash-done__box" }, [
-              el("h2", {}, ["סיימתם את הפרק! 🎉"]),
+              el("h2", {}, ["סיימתם את החלק! 🎉"]),
               el("p", {}, [`סימנתם "ידעתי" ב-${knownCount} מתוך ${order.length} מילים.`]),
               el("div", { class: "actions" }, [
                 el("button", { class: "btn btn--primary", onClick: () => { order.splice(0, order.length, ...shuffle(chapterIndices(num))); pos = 0; knownCount = 0; render(); } }, ["לשחק שוב"]),
-                el("a", { class: "btn", href: `#/vocab/${num}` }, ["חזרה לפרק"]),
+                el("a", { class: "btn", href: `#/vocab/${num}` }, ["חזרה לחלק"]),
               ]),
             ]),
           ])
@@ -165,12 +202,13 @@
       const card = el("div", { class: "flashcard" + (flipped ? " is-flipped" : ""), tabindex: "0", role: "button", "aria-pressed": String(flipped), "aria-label": "לחצו כדי להפוך את הכרטיס" }, [
         el("div", { class: "flashcard__inner" }, [
           el("div", { class: "flashcard__face flashcard__face--front" }, [
-            el("div", { class: "flashcard__arabic", lang: "ar" }, [w.arabic]),
-            el("div", { class: "flashcard__translit" }, [w.translit]),
+            el("div", { class: "flashcard__arabic", lang: "ar" }, [displayArabic(w)]),
+            w.translit ? el("div", { class: "flashcard__translit" }, [w.translit]) : null,
             el("div", { class: "flashcard__hint" }, ["לחצו להפיכה"]),
           ]),
           el("div", { class: "flashcard__face flashcard__face--back" }, [
             el("div", { class: "flashcard__hebrew" }, [w.hebrew]),
+            detailBadgesRow(w),
           ]),
         ]),
       ]);
@@ -300,8 +338,8 @@
       const promptBox =
         q.dir === "ar-he"
           ? el("div", { class: "quiz-prompt" }, [
-              el("div", { class: "quiz-prompt__arabic", lang: "ar" }, [q.word.arabic]),
-              el("div", { class: "quiz-prompt__translit" }, [q.word.translit]),
+              el("div", { class: "quiz-prompt__arabic", lang: "ar" }, [displayArabic(q.word)]),
+              q.word.translit ? el("div", { class: "quiz-prompt__translit" }, [q.word.translit]) : null,
             ])
           : el("div", { class: "quiz-prompt" }, [el("div", { class: "quiz-prompt__hebrew" }, [q.word.hebrew])]);
 
@@ -309,7 +347,7 @@
 
       const optionsWrap = el("div", { class: "quiz-options" });
       q.options.forEach((opt) => {
-        const label = q.dir === "ar-he" ? opt.hebrew : `${opt.arabic} (${opt.translit})`;
+        const label = q.dir === "ar-he" ? opt.hebrew : arabicLabel(opt);
         const btn = el("button", { class: "quiz-option", lang: q.dir === "ar-he" ? "he" : "ar" }, [label]);
         btn.addEventListener("click", () => selectAnswer(q, opt, btn, optionsWrap));
         optionsWrap.appendChild(btn);
@@ -324,10 +362,10 @@
       Array.from(optionsWrap.children).forEach((child) => (child.disabled = true));
       btn.classList.add(correct ? "is-correct" : "is-wrong");
       if (!correct) {
-        Array.from(optionsWrap.children).forEach((child) => {
-          const label = child.textContent;
-          const isCorrectLabel = q.dir === "ar-he" ? label === q.word.hebrew : label.startsWith(q.word.arabic);
-          if (isCorrectLabel) child.classList.add("is-correct");
+        Array.from(optionsWrap.children).forEach((child, i) => {
+          const o = q.options[i];
+          const isCorrectOption = o.arabic === q.word.arabic && o.hebrew === q.word.hebrew;
+          if (isCorrectOption) child.classList.add("is-correct");
         });
       }
       answers.push({ q, chosen: opt, correct });
@@ -351,18 +389,18 @@
             answers.map((a) =>
               el("li", { class: "quiz-results__item " + (a.correct ? "is-correct" : "is-wrong") }, [
                 el("div", { class: "quiz-results__q", lang: a.q.dir === "ar-he" ? "ar" : "he" }, [
-                  a.q.dir === "ar-he" ? `${a.q.word.arabic} (${a.q.word.translit})` : a.q.word.hebrew,
+                  a.q.dir === "ar-he" ? arabicLabel(a.q.word) : a.q.word.hebrew,
                 ]),
-                el("div", { class: "quiz-results__given" }, ["תשובתכם: ", a.q.dir === "ar-he" ? a.chosen.hebrew : `${a.chosen.arabic} (${a.chosen.translit})`]),
+                el("div", { class: "quiz-results__given" }, ["תשובתכם: ", a.q.dir === "ar-he" ? a.chosen.hebrew : arabicLabel(a.chosen)]),
                 !a.correct
-                  ? el("div", { class: "quiz-results__correct" }, ["התשובה הנכונה: ", a.q.dir === "ar-he" ? a.q.word.hebrew : `${a.q.word.arabic} (${a.q.word.translit})`])
+                  ? el("div", { class: "quiz-results__correct" }, ["התשובה הנכונה: ", a.q.dir === "ar-he" ? a.q.word.hebrew : arabicLabel(a.q.word)])
                   : null,
               ])
             )
           ),
           el("div", { class: "actions" }, [
             el("a", { class: "btn btn--primary", href: `#/vocab/${num}/quiz` }, ["בוחן חדש"]),
-            el("a", { class: "btn", href: `#/vocab/${num}` }, ["חזרה לפרק"]),
+            el("a", { class: "btn", href: `#/vocab/${num}` }, ["חזרה לחלק"]),
           ]),
         ])
       );
@@ -377,7 +415,7 @@
     const input = el("input", { type: "search", class: "search-input", placeholder: "חפשו לפי עברית, ערבית או תעתיק...", "aria-label": "חיפוש מילים" });
     const resultsWrap = el("div", { class: "search-results" });
 
-    container.appendChild(pageHeader("חיפוש חופשי", "חיפוש בכל 400 מילות אוצר המילים."));
+    container.appendChild(pageHeader("חיפוש חופשי", `חיפוש בכל ${VOCABULARY.length} מילות אוצר המילים.`));
     container.appendChild(input);
     container.appendChild(resultsWrap);
 
@@ -392,24 +430,28 @@
         return;
       }
       const q = query.toLowerCase();
+      const strippedQuery = stripDiacritics(query);
       const matches = VOCABULARY.map((w, i) => ({ w, i })).filter(
-        ({ w }) => w.hebrew.includes(query) || w.arabic.includes(query) || w.translit.toLowerCase().includes(q)
+        ({ w }) => w.hebrew.includes(query) || w.arabic.includes(strippedQuery) || (w.translit || "").toLowerCase().includes(q)
       );
       if (!matches.length) {
         resultsWrap.appendChild(el("p", { class: "search-hint" }, ["לא נמצאו תוצאות."]));
         return;
       }
       const table = el("table", { class: "word-table" }, [
-        el("thead", {}, [el("tr", {}, [el("th", {}, ["ערבית"]), el("th", {}, ["תעתיק"]), el("th", {}, ["עברית"]), el("th", {}, ["פרק"])])]),
+        el("thead", {}, [el("tr", {}, [el("th", {}, ["ערבית"]), el("th", {}, ["תעתיק"]), el("th", {}, ["עברית"]), el("th", {}, ["חלק"])])]),
         el(
           "tbody",
           {},
           matches.slice(0, 100).map(({ w }) =>
             el("tr", {}, [
-              el("td", { class: "ar", lang: "ar" }, [w.arabic]),
-              el("td", { class: "translit" }, [w.translit]),
+              el("td", { class: "ar" }, [
+                el("span", { lang: "ar" }, [displayArabic(w)]),
+                detailBadgesRow(w),
+              ]),
+              el("td", { class: "translit" }, [w.translit || ""]),
               el("td", {}, [w.hebrew]),
-              el("td", {}, [el("a", { href: `#/vocab/${w.chapter}` }, [`פרק ${w.chapter}`])]),
+              el("td", {}, [el("a", { href: `#/vocab/${w.chapter}` }, [chapterTitleOf(w.chapter)])]),
             ])
           )
         ),
@@ -431,7 +473,7 @@
   }
 
   function notFound() {
-    return el("div", { class: "view" }, [el("h1", {}, ["הפרק לא נמצא"]), el("a", { href: "#/vocab" }, ["חזרה לרשימת הפרקים"])]);
+    return el("div", { class: "view" }, [el("h1", {}, ["החלק לא נמצא"]), el("a", { href: "#/vocab" }, ["חזרה לרשימת החלקים"])]);
   }
 
   global.Vocabulary = { registerRoutes };

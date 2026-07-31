@@ -12,22 +12,42 @@ SRC = "אוצר_מילים_ערבית.xlsx"
 wb = openpyxl.load_workbook(SRC, data_only=True)
 
 # --- גיליון 1: אוצר מילים כללי ---
+# מאגר המילים הרשמי של משרד החינוך (כיתות ז'-י"ב), מחולק ל-6 "חלקים" לפי
+# רמת קושי מצטברת (חלק א' = לשעבר כיתה ז', וכן הלאה) - לא לפי נושא כמו
+# האוצ"מ הקודם. עמודות אופציונליות (תעתיק/ריבוי/עתיד/מין/מושא/מענה) עשויות
+# להיות ריקות לחלק מהמילים; מטופלות בעדינות (None/מחרוזת ריקה) ולא כשגיאה.
 ws = wb["אוצר מילים כללי"]
 rows = [r for r in ws.iter_rows(min_row=2, values_only=True) if isinstance(r[0], int)]
 
+def blank_to_none(v):
+    v = str(v).strip() if v is not None else ""
+    return v or None
+
 chapter_titles = {}
 vocabulary = []
-for chapter_num, chapter_title, arabic, hebrew, translit in rows:
-    chapter_titles.setdefault(chapter_num, chapter_title)
-    vocabulary.append({
-        "chapter": chapter_num,
+for (part_num, part_title, arabic, hebrew, translit, arabic_voc,
+     plural, verb_present, gender, transitive, response) in rows:
+    chapter_titles.setdefault(part_num, part_title)
+    word = {
+        "chapter": part_num,
         "arabic": arabic.strip(),
+        "arabicVoc": blank_to_none(arabic_voc),
         "hebrew": hebrew.strip(),
-        "translit": translit.strip(),
-    })
+        "translit": blank_to_none(translit),
+    }
+    plural = blank_to_none(plural)
+    verb_present = blank_to_none(verb_present)
+    gender = blank_to_none(gender)
+    response = blank_to_none(response)
+    if plural: word["plural"] = plural
+    if verb_present: word["verbPresent"] = verb_present
+    if gender: word["gender"] = gender
+    if blank_to_none(transitive): word["transitive"] = True
+    if response: word["response"] = response
+    vocabulary.append(word)
 
-assert len(vocabulary) == 400, f"Expected 400 words, got {len(vocabulary)}"
-assert len(chapter_titles) == 10, f"Expected 10 chapters, got {len(chapter_titles)}"
+assert len(vocabulary) == 1130, f"Expected 1130 words, got {len(vocabulary)}"
+assert len(chapter_titles) == 6, f"Expected 6 parts, got {len(chapter_titles)}"
 
 chapters = [{"num": n, "title": chapter_titles[n]} for n in sorted(chapter_titles)]
 
@@ -116,7 +136,16 @@ assert len(verb_roots) == 40, f"Expected 40 verb roots, got {len(verb_roots)}"
 
 with open("data/vocabulary.js", "w", encoding="utf-8") as f:
     f.write("// קובץ נוצר אוטומטית מתוך אוצר_מילים_ערבית.xlsx על ידי scripts/convert_xlsx_to_js.py\n")
-    f.write("// אל תערוך ידנית - ערוך את קובץ המקור והרץ מחדש את הסקריפט.\n\n")
+    f.write("// אל תערוך ידנית - ערוך את קובץ המקור והרץ מחדש את הסקריפט.\n")
+    f.write("//\n")
+    f.write("// מקור: מאגר המילים הרשמי של משרד החינוך (כיתות ז'-י\"ב, הפיקוח על הוראת\n")
+    f.write("// ערבית, מאי 2015). VOCAB_CHAPTERS מחולק ל-6 \"חלקים\" (א'-ו') לפי רמת קושי\n")
+    f.write("// מצטברת - לא לפי נושא. arabic הוא הכתיב הרגיל (ללא ניקוד, לשימוש פנימי\n")
+    f.write("// בהשוואות בבוחן ובחיפוש בלבד); arabicVoc הוא הניקוד המלא כפי שסופק במקור\n")
+    f.write("// (לא ניקוד ידני שלנו הפעם). translit הוא null כרגע (לא סופק במקור).\n")
+    f.write("// שדות אופציונליים כשקיימים במקור: plural (צורת ריבוי), verbPresent (צורת\n")
+    f.write("// עתיד/הווה של פועל), gender (מין דקדוקי), transitive (הפועל דורש מושא),\n")
+    f.write("// response (ברכת המענה הנהוגה, למילות ברכה/נימוס).\n\n")
     f.write("const VOCAB_CHAPTERS = ")
     f.write(json.dumps(chapters, ensure_ascii=False, indent=2))
     f.write(";\n\n")
