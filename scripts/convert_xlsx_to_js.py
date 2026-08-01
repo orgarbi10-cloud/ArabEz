@@ -52,7 +52,7 @@ for (chapter_num, chapter_title, part_num, part_title, arabic, hebrew, translit,
     if response: word["response"] = response
     vocabulary.append(word)
 
-assert len(vocabulary) == 1129, f"Expected 1129 words, got {len(vocabulary)}"
+assert len(vocabulary) == 1076, f"Expected 1076 words, got {len(vocabulary)}"
 assert len(chapter_titles) == 6, f"Expected 6 chapters, got {len(chapter_titles)}"
 assert len(part_titles) == 30, f"Expected 30 chapter/part combos, got {len(part_titles)}"
 
