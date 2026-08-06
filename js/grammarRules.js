@@ -9,8 +9,22 @@
 
   // שורש הדוגמה "ف-ع-ل" (= "לעשות") המשמש בסיס לכל תבניות הבניינים בטבלה 3.2
   const FA_AIN_LAM = { root: "فعل", r1: "ف", r2: "ع", r3: "ل", hebrew: "לעשות (שורש לדוגמה)", translit: "פעל" };
-  // שורש אמיתי לדוגמה נוספת בכל בניין
-  const EXAMPLE_ROOT = VERB_ROOTS[0]; // كتب - לכתוב
+
+  // שורש אמיתי לדוגמה נוספת - שונה בכל בניין (כדי להדגים כל תבנית עם דוגמה
+  // אותנטית ומוכרת במקום לחזור על אותה מילה "כתב" בכל הבניינים). כל שורש
+  // נבחר כך שהצורה שהמנוע מייצר ממנו (VerbEngine, ללא טיפול מיוחד בשורשים
+  // "חלולים"/עם אות גרונית) אכן תואמת את המילה האמיתית והמוכרת בבניין הזה.
+  const EXAMPLE_ROOTS_BY_BINYAN = {
+    I: { root: "كتب", r1: "ك", r2: "ت", r3: "ب", hebrew: "לכתוב" },
+    II: { root: "دمر", r1: "د", r2: "م", r3: "ر", hebrew: "להרוס, להחריב" },
+    III: { root: "سفر", r1: "س", r2: "ف", r3: "ر", hebrew: "לנסוע" },
+    IV: { root: "رسل", r1: "ر", r2: "س", r3: "ل", hebrew: "לשלוח" },
+    V: { root: "كلم", r1: "ك", r2: "ل", r3: "م", hebrew: "לדבר, לשוחח" },
+    VI: { root: "عون", r1: "ع", r2: "و", r3: "ن", hebrew: "לשתף פעולה" },
+    VII: { root: "كسر", r1: "ك", r2: "س", r3: "ر", hebrew: "להישבר" },
+    VIII: { root: "جمع", r1: "ج", r2: "م", r3: "ع", hebrew: "להיפגש, להתכנס" },
+    X: { root: "قبل", r1: "ق", r2: "ب", r3: "ل", hebrew: "לקבל את פני-, לארח" },
+  };
 
   const TENSE_LABELS = { past: "עבר", present: "הווה/עתיד", imperative: "ציווי", masdar: "מצדר" };
 
@@ -387,8 +401,9 @@
     container.appendChild(el("h2", {}, ["טבלת נטייה מלאה לכל הגופים (ف-ع-ل)"]));
     container.appendChild(fullParadigm(b, FA_AIN_LAM));
 
-    container.appendChild(el("h2", {}, ["דוגמה עם שורש אמיתי: " + EXAMPLE_ROOT.root + " (" + EXAMPLE_ROOT.hebrew + ")"]));
-    container.appendChild(baseFormsTable(b, EXAMPLE_ROOT));
+    const exampleRoot = EXAMPLE_ROOTS_BY_BINYAN[b.id] || EXAMPLE_ROOTS_BY_BINYAN.I;
+    container.appendChild(el("h2", {}, ["דוגמה עם שורש אמיתי: " + exampleRoot.root + " (" + exampleRoot.hebrew + ")"]));
+    container.appendChild(baseFormsTable(b, exampleRoot));
 
     container.appendChild(
       el("p", { class: "hint-text" }, [
