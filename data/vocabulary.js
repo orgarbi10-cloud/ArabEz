@@ -710,14 +710,6 @@ const VOCABULARY = [
   {
     "chapter": 1,
     "part": 1,
-    "arabic": "دمشق",
-    "arabicVoc": "دِمَشْق",
-    "hebrew": "דמשק",
-    "translit": "דמשק"
-  },
-  {
-    "chapter": 1,
-    "part": 1,
     "arabic": "دور",
     "arabicVoc": "دَوْر",
     "hebrew": "תור, תפקיד",
@@ -2507,7 +2499,7 @@ const VOCABULARY = [
   },
   {
     "chapter": 2,
-    "part": 3,
+    "part": 4,
     "arabic": "عكا",
     "arabicVoc": "عَكَّا",
     "hebrew": "עכו",
@@ -2515,7 +2507,7 @@ const VOCABULARY = [
   },
   {
     "chapter": 2,
-    "part": 3,
+    "part": 4,
     "arabic": "عم",
     "arabicVoc": "عَمّ",
     "hebrew": "דוד (מצד האב)",
@@ -2524,7 +2516,7 @@ const VOCABULARY = [
   },
   {
     "chapter": 2,
-    "part": 3,
+    "part": 4,
     "arabic": "عمل",
     "arabicVoc": "عَمَل",
     "hebrew": "עבודה",
@@ -2822,7 +2814,7 @@ const VOCABULARY = [
   },
   {
     "chapter": 2,
-    "part": 1,
+    "part": 2,
     "arabic": "مساء",
     "arabicVoc": "مَسَاء",
     "hebrew": "ערב",
@@ -2949,7 +2941,7 @@ const VOCABULARY = [
   },
   {
     "chapter": 2,
-    "part": 2,
+    "part": 3,
     "arabic": "وقف",
     "arabicVoc": "وَقَفَ",
     "hebrew": "עמד",
@@ -2958,43 +2950,11 @@ const VOCABULARY = [
   },
   {
     "chapter": 2,
-    "part": 2,
+    "part": 3,
     "arabic": "يمين",
     "arabicVoc": "يَمِين",
     "hebrew": "ימין",
     "translit": "ימינ"
-  },
-  {
-    "chapter": 2,
-    "part": 4,
-    "arabic": "يوم ٱلأحد",
-    "arabicVoc": "يَوْم ٱلْأَحَد",
-    "hebrew": "יום ראשון",
-    "translit": "יומ אלאחד"
-  },
-  {
-    "chapter": 2,
-    "part": 4,
-    "arabic": "يوم ٱلجمعة",
-    "arabicVoc": "يَوْم ٱلْجُمْعَة",
-    "hebrew": "יום שישי",
-    "translit": "יומ אלג׳מעה"
-  },
-  {
-    "chapter": 2,
-    "part": 4,
-    "arabic": "يوم ٱلخميس",
-    "arabicVoc": "يَوْم ٱلْخَمِيس",
-    "hebrew": "יום חמישי",
-    "translit": "יומ אלח׳מיס"
-  },
-  {
-    "chapter": 2,
-    "part": 4,
-    "arabic": "يوم ٱلسبت",
-    "arabicVoc": "يَوْم ٱلسَّبْت",
-    "hebrew": "יום שבת",
-    "translit": "יומ אלסבת"
   },
   {
     "chapter": 3,
@@ -3715,15 +3675,6 @@ const VOCABULARY = [
     "hebrew": "מטוס",
     "translit": "טאארה",
     "plural": "طَائِرَات"
-  },
-  {
-    "chapter": 3,
-    "part": 1,
-    "arabic": "طالب",
-    "arabicVoc": "طَالِب",
-    "hebrew": "סטודנט",
-    "translit": "טאלב",
-    "plural": "طُلاَّب"
   },
   {
     "chapter": 3,
@@ -4505,20 +4456,12 @@ const VOCABULARY = [
   },
   {
     "chapter": 4,
-    "part": 4,
+    "part": 3,
     "arabic": "أجرى",
     "arabicVoc": "أَجْرَى",
     "hebrew": "ניהל, ערך",
     "translit": "אג׳רא",
     "verbPresent": "يُجْرِي"
-  },
-  {
-    "chapter": 4,
-    "part": 4,
-    "arabic": "أديب",
-    "arabicVoc": "أَدِيب",
-    "hebrew": "סופר, אדיב",
-    "translit": "אדיב"
   },
   {
     "chapter": 4,
@@ -4530,7 +4473,7 @@ const VOCABULARY = [
   },
   {
     "chapter": 4,
-    "part": 2,
+    "part": 1,
     "arabic": "إستعمل",
     "arabicVoc": "إِسْتَعْمَلَ",
     "hebrew": "השתמש ב",
@@ -4547,7 +4490,7 @@ const VOCABULARY = [
   },
   {
     "chapter": 4,
-    "part": 2,
+    "part": 1,
     "arabic": "إشترى",
     "arabicVoc": "إِشْتَرَى",
     "hebrew": "קנה",
@@ -4566,7 +4509,7 @@ const VOCABULARY = [
   },
   {
     "chapter": 4,
-    "part": 2,
+    "part": 1,
     "arabic": "أعطى",
     "arabicVoc": "أَعْطَى",
     "hebrew": "נתן את ל",
@@ -4674,15 +4617,6 @@ const VOCABULARY = [
   },
   {
     "chapter": 4,
-    "part": 4,
-    "arabic": "أمير",
-    "arabicVoc": "أَمِير",
-    "hebrew": "נסיך, אמיר",
-    "translit": "אמיר",
-    "plural": "أُمَرَاء"
-  },
-  {
-    "chapter": 4,
     "part": 5,
     "arabic": "إنتخابات",
     "arabicVoc": "إنْتِخَابَات",
@@ -4704,15 +4638,6 @@ const VOCABULARY = [
     "arabicVoc": "إِنْقَطَعَ",
     "hebrew": "ניתק, נפסק",
     "translit": "אנקטע"
-  },
-  {
-    "chapter": 4,
-    "part": 2,
-    "arabic": "أهل",
-    "arabicVoc": "أَهْل",
-    "hebrew": "בני משפחה, אנשי-, הורים",
-    "translit": "אהל",
-    "plural": "أَهَالي َأَهٍال"
   },
   {
     "chapter": 4,
@@ -4834,14 +4759,6 @@ const VOCABULARY = [
     "arabicVoc": "تَكَلَّمَ",
     "hebrew": "דיבר, שוחח",
     "translit": "תכלמ"
-  },
-  {
-    "chapter": 4,
-    "part": 1,
-    "arabic": "تلك",
-    "arabicVoc": "تِلْكَ",
-    "hebrew": "היא, ההיא",
-    "translit": "תלכ"
   },
   {
     "chapter": 4,
@@ -5036,37 +4953,11 @@ const VOCABULARY = [
   },
   {
     "chapter": 4,
-    "part": 1,
-    "arabic": "ذلك",
-    "arabicVoc": "ذٰلِكَ",
-    "hebrew": "ההוא",
-    "translit": "ד׳לכ"
-  },
-  {
-    "chapter": 4,
-    "part": 5,
-    "arabic": "رئيس",
-    "arabicVoc": "رَئيِس",
-    "hebrew": "נשיא, ראש, יו\"ר",
-    "translit": "ראיס",
-    "plural": "رُؤَسَاء"
-  },
-  {
-    "chapter": 4,
     "part": 5,
     "arabic": "رئيس الحكومة / رئيس الوزراء",
     "arabicVoc": "رَئِيس الْحُكُومَة / رَئِيس الْوُزَرَاء",
     "hebrew": "ראש הממשלה",
     "translit": "ראיס אלחכומה / ראיס אלוזראא"
-  },
-  {
-    "chapter": 4,
-    "part": 2,
-    "arabic": "رحلة",
-    "arabicVoc": "رِحْلَة",
-    "hebrew": "טיול, מסע",
-    "translit": "רחלה",
-    "plural": "رِحْلَات"
   },
   {
     "chapter": 4,
@@ -5102,23 +4993,6 @@ const VOCABULARY = [
     "hebrew": "עזר ל",
     "translit": "סאעד",
     "transitive": true
-  },
-  {
-    "chapter": 4,
-    "part": 1,
-    "arabic": "ساعة",
-    "arabicVoc": "سَاعَة",
-    "hebrew": "שעה",
-    "translit": "סאעה",
-    "plural": "سَاعَات"
-  },
-  {
-    "chapter": 4,
-    "part": 1,
-    "arabic": "سكن",
-    "arabicVoc": "سَكَنَ",
-    "hebrew": "גר",
-    "translit": "סכנ"
   },
   {
     "chapter": 4,
@@ -5359,15 +5233,7 @@ const VOCABULARY = [
   },
   {
     "chapter": 4,
-    "part": 3,
-    "arabic": "علم",
-    "arabicVoc": "عَلَّمَ",
-    "hebrew": "לימד",
-    "translit": "עלמ"
-  },
-  {
-    "chapter": 4,
-    "part": 3,
+    "part": 2,
     "arabic": "علم",
     "arabicVoc": "عَلَم",
     "hebrew": "דגל",
@@ -5385,7 +5251,7 @@ const VOCABULARY = [
   },
   {
     "chapter": 4,
-    "part": 3,
+    "part": 2,
     "arabic": "فاز",
     "arabicVoc": "فَازَ",
     "hebrew": "זכה, זכייה, ניצחון",
@@ -5431,15 +5297,6 @@ const VOCABULARY = [
     "arabicVoc": "فَنَّان",
     "hebrew": "אומן",
     "translit": "פנאנ"
-  },
-  {
-    "chapter": 4,
-    "part": 5,
-    "arabic": "قام ب",
-    "arabicVoc": "قَامَ بِ",
-    "hebrew": "ערך, ביצע",
-    "translit": "קאמ ב",
-    "verbPresent": "يَقُومُ بِ"
   },
   {
     "chapter": 4,
@@ -5584,15 +5441,6 @@ const VOCABULARY = [
   },
   {
     "chapter": 4,
-    "part": 1,
-    "arabic": "مرحبا",
-    "arabicVoc": "مَرْحَبًا",
-    "hebrew": "שלום",
-    "translit": "מרחבא",
-    "response": "مَرْحَبْتَيْن"
-  },
-  {
-    "chapter": 4,
     "part": 5,
     "arabic": "مسؤول",
     "arabicVoc": "مَسْؤُول",
@@ -5674,15 +5522,6 @@ const VOCABULARY = [
     "arabicVoc": "مَلْعَب",
     "hebrew": "מגרש משחקים",
     "translit": "מלעב"
-  },
-  {
-    "chapter": 4,
-    "part": 5,
-    "arabic": "ممثل",
-    "arabicVoc": "مُمَثِّل",
-    "hebrew": "נציג, שחקן",
-    "translit": "ממת׳ל",
-    "plural": "مُمَثِّلُونَ / مُمَثِّلِينَ"
   },
   {
     "chapter": 4,
@@ -5813,28 +5652,11 @@ const VOCABULARY = [
   {
     "chapter": 4,
     "part": 1,
-    "arabic": "وصل",
-    "arabicVoc": "وَصَلَ",
-    "hebrew": "הגיע",
-    "translit": "וצל"
-  },
-  {
-    "chapter": 4,
-    "part": 1,
     "arabic": "وقت",
     "arabicVoc": "وَقْت",
     "hebrew": "זמן",
     "translit": "וקת",
     "plural": "أَوْقات"
-  },
-  {
-    "chapter": 4,
-    "part": 3,
-    "arabic": "وقع",
-    "arabicVoc": "وَقَعَ",
-    "hebrew": "נמצא, שכן, נפל",
-    "translit": "וקע",
-    "verbPresent": "يَقَعُ"
   },
   {
     "chapter": 4,
@@ -5952,14 +5774,6 @@ const VOCABULARY = [
   },
   {
     "chapter": 5,
-    "part": 1,
-    "arabic": "إجتماع",
-    "arabicVoc": "إِجْتِمَاع",
-    "hebrew": "פגישה, מפגש, התכנסות",
-    "translit": "אג׳תמאע"
-  },
-  {
-    "chapter": 5,
     "part": 3,
     "arabic": "إجتماعي",
     "arabicVoc": "إِجْتِمَاعِيّ",
@@ -5998,14 +5812,6 @@ const VOCABULARY = [
     "arabicVoc": "إِخْتَارَ",
     "hebrew": "בחר",
     "translit": "אח׳תאר"
-  },
-  {
-    "chapter": 5,
-    "part": 3,
-    "arabic": "أخذ",
-    "arabicVoc": "أَخَذَ",
-    "hebrew": "פועל בעתיד – התחיל ל",
-    "translit": "אח׳ד׳"
   },
   {
     "chapter": 5,
@@ -6218,15 +6024,6 @@ const VOCABULARY = [
     "arabicVoc": "أَلْمُقْبِل",
     "hebrew": "הבא",
     "translit": "אלמקבל"
-  },
-  {
-    "chapter": 5,
-    "part": 1,
-    "arabic": "إمرأة",
-    "arabicVoc": "إِمْرَأَة",
-    "hebrew": "אישה ( האישה)",
-    "translit": "אמראה",
-    "plural": "نِسَاء أَلْمَرْأَة"
   },
   {
     "chapter": 5,
@@ -6569,15 +6366,6 @@ const VOCABULARY = [
   },
   {
     "chapter": 5,
-    "part": 4,
-    "arabic": "حضر",
-    "arabicVoc": "حَضَرَ",
-    "hebrew": "נכח ב",
-    "translit": "חצ׳ר",
-    "transitive": true
-  },
-  {
-    "chapter": 5,
     "part": 5,
     "arabic": "حق",
     "arabicVoc": "حَقّ",
@@ -6687,14 +6475,6 @@ const VOCABULARY = [
   {
     "chapter": 5,
     "part": 5,
-    "arabic": "ذلك وذلك",
-    "arabicVoc": "ذٰلِكَ وَذٰلِكَ",
-    "hebrew": "ההוא - - וזאת.../",
-    "translit": "ד׳לכ וד׳לכ"
-  },
-  {
-    "chapter": 5,
-    "part": 5,
     "arabic": "لذلك / بعدذلك",
     "arabicVoc": "لِذٰلِك / بَعْدَذٰلِكَ",
     "hebrew": "לכן/ - אחר כך/",
@@ -6767,15 +6547,6 @@ const VOCABULARY = [
   {
     "chapter": 5,
     "part": 2,
-    "arabic": "سائح",
-    "arabicVoc": "سَائِح",
-    "hebrew": "תייר/ תיירות",
-    "translit": "סאאח",
-    "plural": "سُيَّاح / سِيَاحَة"
-  },
-  {
-    "chapter": 5,
-    "part": 2,
     "arabic": "سابق",
     "arabicVoc": "سَابِق",
     "hebrew": "קודם",
@@ -6832,15 +6603,6 @@ const VOCABULARY = [
     "hebrew": "הרשה ל",
     "translit": "סמח",
     "plural": "سَمَحُونَ / سَمَحِينَ"
-  },
-  {
-    "chapter": 5,
-    "part": 2,
-    "arabic": "شأن",
-    "arabicVoc": "شَأْن",
-    "hebrew": "עניין",
-    "translit": "שאנ",
-    "plural": "شُؤُون"
   },
   {
     "chapter": 5,
@@ -6924,15 +6686,6 @@ const VOCABULARY = [
     "arabicVoc": "طَيَرَان",
     "hebrew": "תעופה",
     "translit": "טיראנ"
-  },
-  {
-    "chapter": 5,
-    "part": 2,
-    "arabic": "عاد",
-    "arabicVoc": "عَادَ",
-    "hebrew": "חזר, שב, שיבה, חזרה",
-    "translit": "עאד",
-    "verbPresent": "يَعُودُ عَوْدَة"
   },
   {
     "chapter": 5,
