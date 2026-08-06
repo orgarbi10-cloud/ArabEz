@@ -65,7 +65,7 @@
     check("II present huwa (ar)", VerbEngine.conjugatePresent(KATABA, "II", "huwa").ar, "يُكَتِّبُ");
     check("II imperative anta (ar)", VerbEngine.conjugateImperative(KATABA, "II", "anta").ar, "كَتِّبْ");
     check("II masdar (ar)", VerbEngine.conjugateMasdar(KATABA, "II").ar, "تَكْتِيب");
-    check("II past huwa (he)", VerbEngine.conjugatePast(KATABA, "II", "huwa").he, "כתתב");
+    check("II past huwa (he)", VerbEngine.conjugatePast(KATABA, "II", "huwa").he, "כתב");
     check("II masdar (he)", VerbEngine.conjugateMasdar(KATABA, "II").he, "תכתיב");
 
     // ------------------------------------------------------------------

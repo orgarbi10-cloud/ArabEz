@@ -47,10 +47,6 @@
     return AR_TO_HE[arLetter] || arLetter;
   }
 
-  function heDouble(s) {
-    return s + s;
-  }
-
   // מנרמל ל-NFC: לסימני ניקוד ערביים יש combining class שונה (שדה=33,
   // תנועות=30), כך שאותה מילה יכולה להיכתב עם הסימנים באותו בסיס בסדר שונה
   // (למשל תנועה-ואז-שדה, או שדה-ואז-תנועה) ועדיין להיראות/להישמע זהה.
@@ -100,9 +96,9 @@
       digit: "2",
       name: "בניין 2",
       meaning: "גרימה / הכבדה / תדירות",
-      pastBase: (r1, r2, h1, h2) => ({ ar: r1 + FATHA + r2 + SHADDA + FATHA, he: h1 + heDouble(h2) }),
+      pastBase: (r1, r2, h1, h2) => ({ ar: r1 + FATHA + r2 + SHADDA + FATHA, he: h1 + h2 }),
       presentVowel: "u",
-      presentBase: (r1, r2, h1, h2) => ({ ar: r1 + FATHA + r2 + SHADDA + KASRA, he: h1 + heDouble(h2) }),
+      presentBase: (r1, r2, h1, h2) => ({ ar: r1 + FATHA + r2 + SHADDA + KASRA, he: h1 + h2 }),
       imperativeHamza: null,
       masdar: (r1, r2, r3, h1, h2, h3) => ({
         ar: "ت" + FATHA + r1 + SUKUN + r2 + KASRA + YA + r3,
@@ -144,17 +140,17 @@
       meaning: "רפלקסיבי של בניין 2",
       pastBase: (r1, r2, h1, h2) => ({
         ar: "ت" + FATHA + r1 + FATHA + r2 + SHADDA + FATHA,
-        he: "ת" + h1 + heDouble(h2),
+        he: "ת" + h1 + h2,
       }),
       presentVowel: "a",
       presentBase: (r1, r2, h1, h2) => ({
         ar: "ت" + FATHA + r1 + FATHA + r2 + SHADDA + KASRA,
-        he: "ת" + h1 + heDouble(h2),
+        he: "ת" + h1 + h2,
       }),
       imperativeHamza: null,
       masdar: (r1, r2, r3, h1, h2, h3) => ({
         ar: "ت" + FATHA + r1 + FATHA + r2 + SHADDA + DAMMA + r3,
-        he: "ת" + h1 + heDouble(h2) + h3,
+        he: "ת" + h1 + h2 + h3,
       }),
     },
     {
@@ -246,7 +242,7 @@
     { id: "nahnu", label: "نحن (אנחנו)", r3Vowel: SUKUN, suffix: { ar: "ن" + FATHA + ALIF, he: "נא" } },
     { id: "antuma", label: "أنتما (אתם/ן השניים)", r3Vowel: SUKUN, suffix: { ar: "ت" + DAMMA + "م" + FATHA + ALIF, he: "תמא" } },
     { id: "antum", label: "أنتم (אתם)", r3Vowel: SUKUN, suffix: { ar: "ت" + DAMMA + "م" + SUKUN, he: "תמ" } },
-    { id: "antunna", label: "أنتن (אתן)", r3Vowel: SUKUN, suffix: { ar: "ت" + DAMMA + "ن" + SHADDA + FATHA, he: "תנן" } },
+    { id: "antunna", label: "أنتن (אתן)", r3Vowel: SUKUN, suffix: { ar: "ت" + DAMMA + "ن" + SHADDA + FATHA, he: "תן" } },
     { id: "huma_m", label: "هما ז' (הם השניים)", r3Vowel: FATHA, suffix: { ar: ALIF, he: "א" } },
     { id: "huma_f", label: "هما נ' (הן השתיים)", r3Vowel: FATHA, suffix: { ar: "ت" + FATHA + ALIF, he: "תא" } },
     { id: "hum", label: "هم (הם)", r3Vowel: DAMMA, suffix: { ar: WAW + ALIF, he: "וא" } },
