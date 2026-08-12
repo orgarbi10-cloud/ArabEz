@@ -474,17 +474,47 @@ button, input, select { font-family: inherit; font-size: 1rem; }
 .binyan-detail__hero { text-align: center; margin-bottom: 1.5rem; }
 .binyan-detail__meaning { color: var(--color-text-muted); font-size: 1.1rem; }
 
-.forms-table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.75rem; background: var(--color-surface); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); }
-.forms-table th, .forms-table td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--color-border); text-align: right; }
-.forms-table th { background: var(--color-bg-alt); color: var(--color-primary-dark); }
-.forms-table td.ar { font-family: var(--font-arabic-content); font-size: 1.3rem; }
-.forms-table td.translit { color: var(--color-text-muted); }
+/* חוקי השפה מציגים רק ערבית (בלי תעתיק) - שתי עמודות בלבד (תווית + ערבית),
+   ולכן הטבלה ממורכזת וברוחב מרוסן במקום להימתח על פני כל רוחב העמוד. עמודת
+   הערבית מודגשת (גופן/גודל/צבע) כדי לשמש "הכוכבת" הברורה של השורה. */
+.forms-table {
+  width: 100%; max-width: 620px; margin: 1rem auto 1.75rem; border-collapse: collapse;
+  background: var(--color-surface); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+}
+.forms-table th, .forms-table td { padding: 0.75rem 1.1rem; border-bottom: 1px solid var(--color-border); text-align: right; }
+.forms-table th { background: var(--color-bg-alt); color: var(--color-primary-dark); font-size: 0.95rem; }
+.forms-table tbody tr:last-child td { border-bottom: none; }
+.forms-table tbody tr { transition: background var(--transition); }
+.forms-table tbody tr:hover { background: var(--color-bg-alt); }
+.forms-table td.ar {
+  font-family: var(--font-arabic-content); font-size: 1.6rem; font-weight: 600; color: var(--color-primary-dark);
+}
 
 /* variant לטבלת "הניקוד הסופי" (מרובת-עמודות) - קווי הפרדה מלאים בין כל
-   התאים ועמודות ברוחב שווה, לתצוגה מקצועית וקריאה יותר. לא נוגע ב-forms-table
-   הבסיסית שמשמשת גם את דפי הבניינים וטבלת כינויי הזיקה. */
-.forms-table--grid { table-layout: fixed; min-width: 780px; }
+   התאים ועמודות ברוחב שווה, לתצוגה מקצועית וקריאה יותר. רוחב מלא (לא
+   מרוסן כמו forms-table הבסיסית, כי יש כאן הרבה יותר עמודות). */
+.forms-table--grid { max-width: none; table-layout: fixed; min-width: 780px; }
 .forms-table--grid th, .forms-table--grid td { border: 1px solid var(--color-border); text-align: center; }
+
+/* variant לטבלת הנטייה המלאה (כל הגופים) ולטבלת כינויי הזיקה - קצת יותר
+   קומפקטית מטבלת הבסיס כדי שכל 13 הגופים ייראו נעימים ברצף. */
+.forms-table--paradigm td.ar { font-size: 1.4rem; }
+
+/* stream-card / pillar-quote הן קלאסים משותפים עם עמוד האסלאם (שם עדיין יש
+   תעתיק), ולכן לא נוגעים בכללים הבסיסיים שלהם - במקום זה, modifier ייעודי
+   שמופעל רק מדפי חוקי השפה, אחרי שהתעתיק שם הוסר: מגדיל את שורת הערבית
+   (שממלאת עכשיו את מקום שורת התעתיק שהוסרה) ומוסיף קו-חתימה דקורטיבי קצר
+   מתחתיה, כדי שהכרטיס עדיין ירגיש שלם ומאוזן ולא "יחסר" בו שורה. */
+.stream-card--grammar .stream-card__arabic {
+  font-size: 1.65rem; margin-bottom: 0.9rem; padding-bottom: 0.6rem; position: relative;
+}
+.stream-card--grammar .stream-card__arabic::after {
+  content: ""; position: absolute; bottom: 0; inset-inline-start: 50%; transform: translateX(-50%);
+  width: 48px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--color-secondary), var(--color-accent));
+}
+.pillar-quote--grammar .pillar-quote__arabic { font-size: 1.3rem; margin-bottom: 0.5rem; }
+.pillar-quote--grammar .pillar-quote__he { font-size: 0.95rem; }
 
 .table-scroll { overflow-x: auto; margin-bottom: 1.5rem; }
 .paradigm-wrap h3 { color: var(--color-secondary); margin-top: 1.5rem; }

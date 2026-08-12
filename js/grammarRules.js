@@ -8,7 +8,7 @@
   const { el } = App;
 
   // שורש הדוגמה "ف-ع-ل" (= "לעשות") המשמש בסיס לכל תבניות הבניינים בטבלה 3.2
-  const FA_AIN_LAM = { root: "فعل", r1: "ف", r2: "ع", r3: "ل", hebrew: "לעשות (שורש לדוגמה)", translit: "פעל" };
+  const FA_AIN_LAM = { root: "فعل", r1: "ف", r2: "ع", r3: "ل", hebrew: "לעשות (שורש לדוגמה)" };
 
   // שורש אמיתי לדוגמה נוספת - שונה בכל בניין (כדי להדגים כל תבנית עם דוגמה
   // אותנטית ומוכרת במקום לחזור על אותה מילה "כתב" בכל הבניינים). כל שורש
@@ -70,7 +70,6 @@
       badge: "שם מיודע + כינוי זיקה",
       nameHe: "משפט צלה",
       arabic: "الجُمْلَة الصِّلَة",
-      translit: "אלג׳מלה אלצלה",
       summary: 'משפט שבא אחרי שם עצם מיודע ("השם הזוקק"), ומחובר אליו באמצעות כינוי זיקה (اسم الموصول) המתאים לו במין ובמספר.',
       points: [
         "השם הזוקק (המתואר) הוא תמיד מיודע - עם 'ال' הידיעה, שם פרטי או כינוי גוף",
@@ -78,14 +77,13 @@
         "אחרי כינוי הזיקה בא משפט הזיקה עצמו (الجملة الصلة) - הוא זה שמתאר את השם הזוקק",
       ],
       pronounTable: [
-        { antecedent: "זכר (יחיד)", pronoun: "الَّذِي", translit: "אלד׳י" },
-        { antecedent: "נקבה (יחידה)", pronoun: "الَّتِي", translit: "אלתי" },
-        { antecedent: "רבים (בני אדם)", pronoun: "الَّذِينَ", translit: "אלד׳ין" },
-        { antecedent: "רבות (בנות אדם)", pronoun: "اللَّوَاتِي", translit: "אללואתי" },
+        { antecedent: "זכר (יחיד)", pronoun: "الَّذِي" },
+        { antecedent: "נקבה (יחידה)", pronoun: "الَّتِي" },
+        { antecedent: "רבים (בני אדם)", pronoun: "الَّذِينَ" },
+        { antecedent: "רבות (בנות אדם)", pronoun: "اللَّوَاتِي" },
       ],
       example: {
         arabic: "قَرَأْتُ الكِتَابَ الَّذِي كَتَبَهُ كَاتِبٌ مَشْهُورٌ",
-        translit: "קראת אלכתאב אלד׳י כתבה כאתב משהור",
         he: `"קראתי את הספר שכתב אותו סופר מפורסם"`,
       },
     },
@@ -94,7 +92,6 @@
       badge: "שם לא מיודע, בלי כינוי זיקה",
       nameHe: "משפט צפה",
       arabic: "الجُمْلَة الصِّفَة",
-      translit: "אלג׳מלה אלצפה",
       summary: "משפט שבא אחרי שם עצם לא מיודע (נכ'רה), ומתפקד בעצמו כתואר שלו - בלי שום כינוי זיקה שמפריד ביניהם.",
       points: [
         "השם הזוקק (המתואר) הוא תמיד לא מיודע - נכ'רה, בלי 'ال' הידיעה",
@@ -103,7 +100,6 @@
       ],
       example: {
         arabic: "قَرَأْتُ كِتَابًا كَتَبَهُ كَاتِبٌ مَشْهُورٌ",
-        translit: "קראת כתאב כתבה כאתב משהור",
         he: `"קראתי ספר שכתב אותו סופר מפורסם"`,
       },
     },
@@ -150,9 +146,9 @@
   ];
 
   const IRAB_EXAMPLES = [
-    { arabic: "الطَّالِبُ مُجْتَهِدٌ", translit: "אלטאלב מג׳תהד", he: '"התלמיד חרוץ" - נושא, רפע', role: "רפע" },
-    { arabic: "رَأَيْتُ الطَّالِبَ", translit: "ראית אלטאלב", he: '"ראיתי את התלמיד" - מושא ישיר, נצב', role: "נצב" },
-    { arabic: "سَلَّمْتُ عَلَى الطَّالِبِ", translit: "סלמת עלא אלטאלב", he: '"בירכתי לשלום את התלמיד" - מושא עקיף (אחרי מילת יחס), ג\'ר', role: "ג'ר" },
+    { arabic: "الطَّالِبُ مُجْتَهِدٌ", he: '"התלמיד חרוץ" - נושא, רפע', role: "רפע" },
+    { arabic: "رَأَيْتُ الطَّالِبَ", he: '"ראיתי את התלמיד" - מושא ישיר, נצב', role: "נצב" },
+    { arabic: "سَلَّمْتُ عَلَى الطَّالِبِ", he: '"בירכתי לשלום את התלמיד" - מושא עקיף (אחרי מילת יחס), ג\'ר', role: "ג'ר" },
   ];
 
   // --- תוכן הנושא "ערך היתרון/ערך ההפלגה" ---------------------------------
@@ -168,7 +164,6 @@
       badge: "יותר מ- (+ مِنْ)",
       nameHe: "ערך היתרון",
       arabic: "اِسْم التَّفْضِيل (المُقَارَنَة)",
-      translit: "אסם אלתפדיל (אלמקארנה)",
       summary: "משווה בין שני דברים ואומר שאחד עולה על השני בתכונה מסוימת - במשמעות 'יותר X מ-Y'.",
       points: [
         "התבנית: أَفْعَل / أَفَلّ / أَفْعَى (בהתאם לסוג השורש) + مِنْ",
@@ -176,7 +171,6 @@
       ],
       example: {
         arabic: "أَلْمَدْرَسَة أَقْرَب مِنَ الْبَيْت",
-        translit: "אלמדרסה אקרב מן אלבית",
         he: `"בית הספר קרוב יותר מהבית"`,
       },
     },
@@ -185,7 +179,6 @@
       badge: "הכי.../ה-...ביותר",
       nameHe: "ערך ההפלגה",
       arabic: "اِسْم التَّفْضِيل (المُطْلَق)",
-      translit: "אסם אלתפדיל (אלמוטלק)",
       summary: "מבליט דבר אחד כקיצוני ביותר מתוך קבוצה - 'הכי X' / 'ה-X ביותר'. יש 3 תבניות אפשריות:",
       haflagaTable: [
         { num: "1", pattern: "أفعل + שם מיודע ברבים", link: "סמיכות", example: "أَكْبَر الأَوْلَاد", he: "הכי גדול מבין הילדים" },
@@ -215,11 +208,10 @@
   }
 
   function tafdilCard(f) {
-    return el("div", { class: "stream-card stream-card--" + f.id }, [
+    return el("div", { class: "stream-card stream-card--grammar stream-card--" + f.id }, [
       el("div", { class: "stream-card__percent" }, [f.badge]),
       el("div", { class: "stream-card__name" }, [el("h3", {}, [f.nameHe])]),
       el("div", { class: "stream-card__arabic", lang: "ar" }, [f.arabic]),
-      el("div", { class: "stream-card__translit" }, [f.translit]),
       el("p", { class: "stream-card__summary" }, [f.summary]),
       f.points
         ? el(
@@ -231,9 +223,8 @@
       f.haflagaTable ? haflagaTable(f.haflagaTable) : null,
       f.note ? el("p", { class: "hint-text" }, [f.note]) : null,
       f.example
-        ? el("div", { class: "pillar-quote" }, [
+        ? el("div", { class: "pillar-quote pillar-quote--grammar" }, [
             el("div", { class: "pillar-quote__arabic", lang: "ar" }, [f.example.arabic]),
-            el("div", { class: "pillar-quote__translit" }, [f.example.translit]),
             el("div", { class: "pillar-quote__he" }, [f.example.he]),
           ])
         : null,
@@ -270,9 +261,8 @@
         "div",
         { class: "stream-grid" },
         IRAB_EXAMPLES.map((ex) =>
-          el("div", { class: "pillar-quote" }, [
+          el("div", { class: "pillar-quote pillar-quote--grammar" }, [
             el("div", { class: "pillar-quote__arabic", lang: "ar" }, [ex.arabic]),
-            el("div", { class: "pillar-quote__translit" }, [ex.translit]),
             el("div", { class: "pillar-quote__he" }, [ex.he]),
           ])
         )
@@ -314,11 +304,10 @@
   }
 
   function sifaSilaCard(f) {
-    return el("div", { class: "stream-card stream-card--" + f.id }, [
+    return el("div", { class: "stream-card stream-card--grammar stream-card--" + f.id }, [
       el("div", { class: "stream-card__percent" }, [f.badge]),
       el("div", { class: "stream-card__name" }, [el("h3", {}, [f.nameHe])]),
       el("div", { class: "stream-card__arabic", lang: "ar" }, [f.arabic]),
-      el("div", { class: "stream-card__translit" }, [f.translit]),
       el("p", { class: "stream-card__summary" }, [f.summary]),
       el(
         "ul",
@@ -326,9 +315,8 @@
         f.points.map((p) => el("li", {}, [p]))
       ),
       f.pronounTable ? pronounTable(f.pronounTable) : null,
-      el("div", { class: "pillar-quote" }, [
+      el("div", { class: "pillar-quote pillar-quote--grammar" }, [
         el("div", { class: "pillar-quote__arabic", lang: "ar" }, [f.example.arabic]),
-        el("div", { class: "pillar-quote__translit" }, [f.example.translit]),
         el("div", { class: "pillar-quote__he" }, [f.example.he]),
       ]),
     ]);
@@ -337,11 +325,11 @@
   function pronounTable(rows) {
     return el("div", { class: "table-scroll" }, [
       el("table", { class: "forms-table forms-table--paradigm" }, [
-        el("thead", {}, [el("tr", {}, [el("th", {}, ["השם הזוקק"]), el("th", {}, ["כינוי הזיקה"]), el("th", {}, ["תעתיק"])])]),
+        el("thead", {}, [el("tr", {}, [el("th", {}, ["השם הזוקק"]), el("th", {}, ["כינוי הזיקה"])])]),
         el(
           "tbody",
           {},
-          rows.map((r) => el("tr", {}, [el("td", {}, [r.antecedent]), el("td", { class: "ar", lang: "ar" }, [r.pronoun]), el("td", { class: "translit" }, [r.translit])]))
+          rows.map((r) => el("tr", {}, [el("td", {}, [r.antecedent]), el("td", { class: "ar", lang: "ar" }, [r.pronoun])]))
         ),
       ]),
     ]);
@@ -421,7 +409,7 @@
     const masdar = VerbEngine.conjugateMasdar(root, binyan.id);
 
     return el("table", { class: "forms-table" }, [
-      el("thead", {}, [el("tr", {}, [el("th", {}, ["זמן"]), el("th", {}, ["ערבית"]), el("th", {}, ["תעתיק"])])]),
+      el("thead", {}, [el("tr", {}, [el("th", {}, ["זמן"]), el("th", {}, ["ערבית"])])]),
       el("tbody", {}, [
         formRow("עבר (هو)", past),
         formRow("הווה/עתיד (هو)", present),
@@ -430,14 +418,14 @@
           ? formRow("מצדר", masdar)
           : el("tr", {}, [
               el("td", {}, ["מצדר"]),
-              el("td", { colspan: "2", class: "hint-text" }, ["משתנה לפי פועל — לא ניתן לגנרציה אוטומטית (ראו אזהרה במפרט)"]),
+              el("td", { class: "hint-text" }, ["משתנה לפי פועל — לא ניתן לגנרציה אוטומטית (ראו אזהרה במפרט)"]),
             ]),
       ]),
     ]);
   }
 
   function formRow(label, form) {
-    return el("tr", {}, [el("td", {}, [label]), el("td", { class: "ar", lang: "ar" }, [form.ar]), el("td", { class: "translit" }, [form.he])]);
+    return el("tr", {}, [el("td", {}, [label]), el("td", { class: "ar", lang: "ar" }, [form.ar])]);
   }
 
   function fullParadigm(binyan, root) {
@@ -458,13 +446,13 @@
   function personTable(persons, formFn) {
     return el("div", { class: "table-scroll" }, [
       el("table", { class: "forms-table forms-table--paradigm" }, [
-        el("thead", {}, [el("tr", {}, [el("th", {}, ["גוף"]), el("th", {}, ["ערבית"]), el("th", {}, ["תעתיק"])])]),
+        el("thead", {}, [el("tr", {}, [el("th", {}, ["גוף"]), el("th", {}, ["ערבית"])])]),
         el(
           "tbody",
           {},
           persons.map((p) => {
             const form = formFn(p);
-            return el("tr", {}, [el("td", {}, [p.label]), el("td", { class: "ar", lang: "ar" }, [form.ar]), el("td", { class: "translit" }, [form.he])]);
+            return el("tr", {}, [el("td", {}, [p.label]), el("td", { class: "ar", lang: "ar" }, [form.ar])]);
           })
         ),
       ]),
