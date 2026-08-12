@@ -69,6 +69,24 @@
     check("II masdar (he)", VerbEngine.conjugateMasdar(KATABA, "II").he, "תכתיב");
 
     // ------------------------------------------------------------------
+    // בניין V (تَفَعَّلَ / يَتَفَعَّلُ / تَفَعَّلْ / تَفَعُّل) - בניגוד לבניין II,
+    // תנועת ר2 בהווה/ציווי זהה לזו שבעבר (فتحة, לא كسرة) - ראו הערה ב-BINYANIM.
+    // ------------------------------------------------------------------
+    check("V past huwa (ar)", VerbEngine.conjugatePast(KATABA, "V", "huwa").ar, "تَكَتَّبَ");
+    check("V present huwa (ar)", VerbEngine.conjugatePresent(KATABA, "V", "huwa").ar, "يَتَكَتَّبُ");
+    check("V imperative anta (ar)", VerbEngine.conjugateImperative(KATABA, "V", "anta").ar, "تَكَتَّبْ");
+    check("V masdar (ar)", VerbEngine.conjugateMasdar(KATABA, "V").ar, "تَكَتُّب");
+
+    // ------------------------------------------------------------------
+    // בניין VI (تَفَاعَلَ / يَتَفَاعَلُ / تَفَاعَلْ / تَفَاعُل) - בניגוד לבניין III,
+    // תנועת ר2 בהווה/ציווי זהה לזו שבעבר (فتحة, לא كسرة) - ראו הערה ב-BINYANIM.
+    // ------------------------------------------------------------------
+    check("VI past huwa (ar)", VerbEngine.conjugatePast(KATABA, "VI", "huwa").ar, "تَكَاتَبَ");
+    check("VI present huwa (ar)", VerbEngine.conjugatePresent(KATABA, "VI", "huwa").ar, "يَتَكَاتَبُ");
+    check("VI imperative anta (ar)", VerbEngine.conjugateImperative(KATABA, "VI", "anta").ar, "تَكَاتَبْ");
+    check("VI masdar (ar)", VerbEngine.conjugateMasdar(KATABA, "VI").ar, "تَكَاتُب");
+
+    // ------------------------------------------------------------------
     // בניין IV (أَفْعَلَ / يُفْعِلُ / أَفْعِلْ / إِفْعَال)
     // ------------------------------------------------------------------
     check("IV past huwa (ar)", VerbEngine.conjugatePast(KATABA, "IV", "huwa").ar, "أَكْتَبَ");

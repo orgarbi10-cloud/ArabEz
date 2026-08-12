@@ -143,8 +143,10 @@
         he: "ת" + h1 + h2,
       }),
       presentVowel: "a",
+      // הערה: בבניין V (בניגוד ל-II) התנועה על ר2 בהווה זהה לזו שבעבר -
+      // פתחة, לא كسرة (לדוגמה: تَعَلَّمَ / يَتَعَلَّمُ, לא "يَتَعَلِّمُ").
       presentBase: (r1, r2, h1, h2) => ({
-        ar: "ت" + FATHA + r1 + FATHA + r2 + SHADDA + KASRA,
+        ar: "ت" + FATHA + r1 + FATHA + r2 + SHADDA + FATHA,
         he: "ת" + h1 + h2,
       }),
       imperativeHamza: null,
@@ -163,8 +165,10 @@
         he: "ת" + h1 + "א" + h2,
       }),
       presentVowel: "a",
+      // הערה: בבניין VI (בניגוד ל-III) התנועה על ר2 בהווה זהה לזו שבעבר -
+      // פתחة, לא كسرة (לדוגמה: تَعَاوَنَ / يَتَعَاوَنُ, לא "يَتَعَاوِنُ").
       presentBase: (r1, r2, h1, h2) => ({
-        ar: "ت" + FATHA + r1 + FATHA + ALIF + r2 + KASRA,
+        ar: "ت" + FATHA + r1 + FATHA + ALIF + r2 + FATHA,
         he: "ת" + h1 + "א" + h2,
       }),
       imperativeHamza: null,
