@@ -52,7 +52,7 @@ const VERB_ROOTS = [
     "r2": "ه",
     "r3": "ب",
     "hebrew": "הלך",
-    "translit": "ד'הב",
+    "translit": "ד׳הב",
     "topic": "תנועה",
     "pastVowel": "a",
     "presentVowel": "a"
@@ -63,7 +63,7 @@ const VERB_ROOTS = [
     "r2": "ج",
     "r3": "ع",
     "hebrew": "חזר",
-    "translit": "רג'ע",
+    "translit": "רג׳ע",
     "topic": "תנועה",
     "pastVowel": "a",
     "presentVowel": "i"
@@ -74,7 +74,7 @@ const VERB_ROOTS = [
     "r2": "ر",
     "r3": "ج",
     "hebrew": "יצא",
-    "translit": "ח'רג'",
+    "translit": "ח׳רג׳",
     "topic": "תנועה",
     "pastVowel": "a",
     "presentVowel": "u"
@@ -85,7 +85,7 @@ const VERB_ROOTS = [
     "r2": "خ",
     "r3": "ل",
     "hebrew": "נכנס",
-    "translit": "דח'ל",
+    "translit": "דח׳ל",
     "topic": "תנועה",
     "pastVowel": "a",
     "presentVowel": "u"
@@ -96,7 +96,7 @@ const VERB_ROOTS = [
     "r2": "ل",
     "r3": "س",
     "hebrew": "ישב",
-    "translit": "ג'לס",
+    "translit": "ג׳לס",
     "topic": "פעולות גוף",
     "pastVowel": "a",
     "presentVowel": "i"
@@ -107,7 +107,7 @@ const VERB_ROOTS = [
     "r2": "ظ",
     "r3": "ر",
     "hebrew": "הסתכל",
-    "translit": "נז'ר",
+    "translit": "נז׳ר",
     "topic": "חושים",
     "pastVowel": "a",
     "presentVowel": "u"
@@ -162,7 +162,7 @@ const VERB_ROOTS = [
     "r2": "ل",
     "r3": "ق",
     "hebrew": "סגר",
-    "translit": "ע'לק",
+    "translit": "ע׳לק",
     "topic": "פעולות יומיומיות",
     "pastVowel": "a",
     "presentVowel": "i"
@@ -195,7 +195,7 @@ const VERB_ROOTS = [
     "r2": "ف",
     "r3": "ظ",
     "hebrew": "שינן / שמר",
-    "translit": "חפז'",
+    "translit": "חפז׳",
     "topic": "קוגניטיבי",
     "pastVowel": "i",
     "presentVowel": "a"
@@ -217,7 +217,7 @@ const VERB_ROOTS = [
     "r2": "س",
     "r3": "ل",
     "hebrew": "כיבס / שטף",
-    "translit": "ע'סל",
+    "translit": "ע׳סל",
     "topic": "בית",
     "pastVowel": "a",
     "presentVowel": "i"
@@ -272,7 +272,7 @@ const VERB_ROOTS = [
     "r2": "د",
     "r3": "م",
     "hebrew": "שירת",
-    "translit": "ח'דמ",
+    "translit": "ח׳דמ",
     "topic": "עבודה",
     "pastVowel": "a",
     "presentVowel": "u"
@@ -294,7 +294,7 @@ const VERB_ROOTS = [
     "r2": "ب",
     "r3": "خ",
     "hebrew": "בישל",
-    "translit": "טבח'",
+    "translit": "טבח׳",
     "topic": "בית",
     "pastVowel": "a",
     "presentVowel": "u"
@@ -338,7 +338,7 @@ const VERB_ROOTS = [
     "r2": "م",
     "r3": "ع",
     "hebrew": "אסף",
-    "translit": "ג'מע",
+    "translit": "ג׳מע",
     "topic": "פעולות פיזיות",
     "pastVowel": "a",
     "presentVowel": "a"
@@ -360,7 +360,7 @@ const VERB_ROOTS = [
     "r2": "ر",
     "r3": "ب",
     "hebrew": "הכה",
-    "translit": "דרב",
+    "translit": "צ׳רב",
     "topic": "פעולות פיזיות",
     "pastVowel": "a",
     "presentVowel": "i"
@@ -382,7 +382,7 @@ const VERB_ROOTS = [
     "r2": "ج",
     "r3": "ح",
     "hebrew": "הצליח",
-    "translit": "נג'ח",
+    "translit": "נג׳ח",
     "topic": "הישגים",
     "pastVowel": "a",
     "presentVowel": "a"
@@ -415,7 +415,7 @@ const VERB_ROOTS = [
     "r2": "ح",
     "r3": "ك",
     "hebrew": "צחק",
-    "translit": "דחכ",
+    "translit": "צ׳חכ",
     "topic": "רגשות",
     "pastVowel": "i",
     "presentVowel": "a"

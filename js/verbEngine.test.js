@@ -46,7 +46,7 @@
     check("I (فهم i/a) present huwa (ar)", VerbEngine.conjugatePresent(FAHIMA, "I", "huwa").ar, "يَفْهَمُ");
     check("I (فهم i/a) imperative anta (ar)", VerbEngine.conjugateImperative(FAHIMA, "I", "anta").ar, "اِفْهَمْ");
 
-    const JALASA = { root: "جلس", r1: "ج", r2: "ل", r3: "س", translit: "ג'לס", pastVowel: "a", presentVowel: "i" };
+    const JALASA = { root: "جلس", r1: "ج", r2: "ل", r3: "س", translit: "ג׳לס", pastVowel: "a", presentVowel: "i" };
     check("I (جلس a/i) past huwa (ar)", VerbEngine.conjugatePast(JALASA, "I", "huwa").ar, "جَلَسَ");
     check("I (جلس a/i) present huwa (ar)", VerbEngine.conjugatePresent(JALASA, "I", "huwa").ar, "يَجْلِسُ");
     check("I (جلس a/i) imperative anta (ar)", VerbEngine.conjugateImperative(JALASA, "I", "anta").ar, "اِجْلِسْ");
