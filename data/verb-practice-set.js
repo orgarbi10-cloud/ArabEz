@@ -251,12 +251,6 @@ const VERB_PRACTICE_SET = [
     "personId": "ana"
   },
   {
-    "root": "درس",
-    "binyanId": "VII",
-    "tense": "imperative",
-    "personId": "antuma"
-  },
-  {
     "root": "قطع",
     "binyanId": "VII",
     "tense": "present",
@@ -377,12 +371,6 @@ const VERB_PRACTICE_SET = [
     "personId": "huma_f"
   },
   {
-    "root": "غلق",
-    "binyanId": "VII",
-    "tense": "imperative",
-    "personId": "anta"
-  },
-  {
     "root": "حمل",
     "binyanId": "V",
     "tense": "present",
@@ -465,12 +453,6 @@ const VERB_PRACTICE_SET = [
     "binyanId": "VIII",
     "tense": "present",
     "personId": "hum"
-  },
-  {
-    "root": "قطع",
-    "binyanId": "VII",
-    "tense": "imperative",
-    "personId": "antum"
   },
   {
     "root": "جلس",

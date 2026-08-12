@@ -207,7 +207,7 @@ for verb, root, binyan_digit, tense_label, person_label, translation in ws5.iter
     # למנוע כפל נתונים מול המנוע (מקור האמת היחיד לצורות המנוטות).
     practice_set.append({"root": root, "binyanId": binyan_id, "tense": tense, "personId": person_id})
 
-assert len(practice_set) == 550, f"Expected 550 practice items, got {len(practice_set)}"
+assert len(practice_set) == 547, f"Expected 547 practice items, got {len(practice_set)}"
 
 with open("data/verb-practice-set.js", "w", encoding="utf-8") as f:
     f.write("// קובץ נוצר אוטומטית מתוך אוצר_מילים_ערבית.xlsx (גיליון 'פתרונות') על ידי\n")
