@@ -417,6 +417,19 @@ button, input, select { font-family: inherit; font-size: 1rem; }
 .choice-btn.is-correct { background: var(--color-success-bg); border-color: var(--color-success); color: var(--color-success); }
 .choice-btn.is-wrong { background: var(--color-danger-bg); border-color: var(--color-danger); color: var(--color-danger); }
 
+.root-input {
+  width: 100%; max-width: 320px; padding: 0.55rem 1rem; border-radius: var(--radius-md);
+  border: 2px solid var(--color-border); background: var(--color-surface); font-size: 1.1rem;
+  font-weight: 600; transition: all var(--transition);
+}
+.root-input:focus { border-color: var(--color-primary); }
+.root-input:disabled { cursor: not-allowed; opacity: 0.85; }
+.root-input.is-correct { background: var(--color-success-bg); border-color: var(--color-success); color: var(--color-success); }
+.root-input.is-wrong { background: var(--color-danger-bg); border-color: var(--color-danger); color: var(--color-danger); }
+.root-input__hint { margin-top: 0.35rem; font-weight: 600; font-size: 0.95rem; }
+.root-input__hint.is-correct { color: var(--color-success); }
+.root-input__hint.is-wrong { color: var(--color-danger); }
+
 .check-feedback {
   margin: 1.25rem 0; padding: 1rem 1.25rem; border-radius: var(--radius-md); text-align: center;
 }

@@ -9,7 +9,7 @@
 
 (function (global) {
   "use strict";
-  const { el, shuffle, sample, recordQuizResult, showToast } = App;
+  const { el, shuffle, sample, recordQuizResult, showToast, stripDiacritics } = App;
 
   const TENSES = ["past", "present", "imperative", "masdar"];
   const TENSE_LABELS = { past: "עבר", present: "הווה/עתיד", imperative: "ציווי", masdar: "מצדר" };
@@ -152,10 +152,10 @@
         ])
       );
 
-      const state = { root: null, binyan: null, tense: null, person: null };
+      const state = { root: "", binyan: null, tense: null, person: null };
       const form = el("div", { class: "identify-form" });
 
-      const rootGroup = choiceGroup("מה השורש?", rootOptions(q.root), (root) => (state.root = root), (r) => `${r.root} (${r.translit}) — ${r.hebrew}`, (r) => r.root);
+      const rootGroup = rootInputGroup("מה השורש? (בערבית או בתעתיק עברי)", (val) => (state.root = val));
       const binyanGroup = choiceGroup("מה הבניין?", binyanOptions(q), (b) => (state.binyan = b), (b) => b.name, (b) => b.id);
       const tenseGroup = choiceGroup("מה הזמן?", tenseOptions(), (t) => (state.tense = t), (t) => TENSE_LABELS[t], (t) => t);
       form.appendChild(rootGroup.el);
@@ -180,13 +180,13 @@
             showToast("אנא ענו על כל השדות לפני הבדיקה");
             return;
           }
-          const rootOk = state.root.root === q.root.root;
+          const rootOk = checkRootAnswer(state.root, q.root);
           const binyanOk = state.binyan.id === q.binyan.id;
           const tenseOk = state.tense === q.tense;
           const personOk = q.tense === "masdar" || (state.person && state.person.id === q.personId);
           const allOk = rootOk && binyanOk && tenseOk && personOk;
 
-          rootGroup.freeze(q.root.root);
+          rootGroup.freeze(rootOk, q.root);
           binyanGroup.freeze(q.binyan.id);
           tenseGroup.freeze(q.tense);
           if (personGroup) personGroup.freeze(q.personId);
@@ -205,7 +205,7 @@
 
     function showResults() {
       const graded = answers.map((a) => {
-        const rootOk = a.given.root.root === a.q.root.root;
+        const rootOk = checkRootAnswer(a.given.root, a.q.root);
         const binyanOk = a.given.binyan.id === a.q.binyan.id;
         const tenseOk = a.given.tense === a.q.tense;
         const personOk = a.q.tense === "masdar" || (a.given.person && a.given.person.id === a.q.personId);
@@ -224,7 +224,7 @@
           graded.map((g) =>
             el("li", { class: "quiz-results__item " + (g.allOk ? "is-correct" : "is-wrong") }, [
               el("div", { class: "verb-result__form", lang: "ar" }, [g.q.form.ar, el("span", {}, [" (" + g.q.form.he + ")"])]),
-              resultRow("שורש", `${g.given.root.root} (${g.given.root.translit})`, `${g.q.root.root} (${g.q.root.translit})`, g.rootOk),
+              resultRow("שורש", g.given.root && g.given.root.trim() ? g.given.root.trim() : "(לא הוזן)", `${g.q.root.root} (${g.q.root.translit})`, g.rootOk),
               resultRow("בניין", g.given.binyan.name, g.q.binyan.name, g.binyanOk),
               resultRow("זמן", TENSE_LABELS[g.given.tense], TENSE_LABELS[g.q.tense], g.tenseOk),
               g.q.tense !== "masdar" ? resultRow("גוף", g.given.person.label, personLabel(g.q.tense, g.q.personId), g.personOk) : null,
@@ -288,12 +288,66 @@
     ]);
   }
 
-  function rootOptions(correctRoot) {
-    const distractors = sample(
-      VERB_ROOTS.filter((r) => r.root !== correctRoot.root),
-      3
-    );
-    return shuffle([correctRoot, ...distractors]);
+  // מנרמל שורש בערבית להשוואה חסינת-הקלדה: NFC + הסרת ניקוד + איחוד צורות
+  // אלף (א/أ/إ/آ/ٱ) + הסרת רווחים. אף אחד מ-40 השורשים לא מתחיל בהמזה, אבל
+  // עדיף להיות סלחניים כלפי טעויות הקלדה/autocorrect.
+  function normalizeArabicRoot(s) {
+    return stripDiacritics((s || "").normalize("NFC"))
+      .replace(/[أإآٱ]/g, "ا")
+      .replace(/\s+/g, "");
+  }
+
+  // מנרמל תעתיק עברי להשוואה: NFC + איחוד כל צורות הגרש/אפוסטרוף למקף אחיד
+  // (כדי לא להיכשל על ' לעומת ׳ לעומת ’ וכו') + הסרת רווחים.
+  function normalizeHebrewTranslit(s) {
+    return (s || "")
+      .normalize("NFC")
+      .replace(/[׳’‘`´']/g, "'")
+      .replace(/\s+/g, "");
+  }
+
+  // מקבל תשובה נכונה אם היא תואמת (אחרי נרמול) את השורש בערבית *או* את
+  // התעתיק העברי שלו - לפי מה שהמשתמש בחר להקליד.
+  function checkRootAnswer(typed, correctRoot) {
+    const t = (typed || "").trim();
+    if (!t) return false;
+    if (normalizeArabicRoot(t) === normalizeArabicRoot(correctRoot.root)) return true;
+    if (normalizeHebrewTranslit(t) === normalizeHebrewTranslit(correctRoot.translit)) return true;
+    return false;
+  }
+
+  // שדה טקסט חופשי לשורש (במקום ברירה מרובה) - מקבל קלט בערבית או בתעתיק
+  // עברי. freeze(isCorrect, correctRoot) מנטרל את השדה ומציג משוב+תשובה נכונה
+  // (לשימוש בבדיקה המיידית אחרי מענה, במקביל לשאר שדות choiceGroup).
+  function rootInputGroup(question, onInput) {
+    const wrap = el("div", { class: "choice-group" }, [el("h4", {}, [question])]);
+    const input = el("input", {
+      type: "text",
+      class: "root-input",
+      dir: "rtl",
+      autocomplete: "off",
+      autocapitalize: "off",
+      spellcheck: "false",
+      placeholder: "לדוגמה: كتب או כתב",
+    });
+    input.addEventListener("input", () => onInput(input.value));
+    wrap.appendChild(input);
+    const hint = el("div", { class: "root-input__hint" }, []);
+    wrap.appendChild(hint);
+
+    function freeze(isCorrect, correctRoot) {
+      input.disabled = true;
+      input.classList.add(isCorrect ? "is-correct" : "is-wrong");
+      if (isCorrect) {
+        hint.classList.add("is-correct");
+        hint.textContent = "✓";
+      } else {
+        hint.classList.add("is-wrong");
+        hint.textContent = `נכון: ${correctRoot.root} (${correctRoot.translit})`;
+      }
+    }
+
+    return { el: wrap, freeze };
   }
 
   function binyanOptions(q) {
