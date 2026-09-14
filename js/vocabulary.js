@@ -473,6 +473,7 @@
 
     container.appendChild(pageHeader("חיפוש חופשי", `חיפוש בכל ${VOCABULARY.length} מילות אוצר המילים.`));
     container.appendChild(input);
+    container.appendChild(el("p", { class: "hint-text" }, ["טיפ: אין מקלדת ערבית? הקלידו עברית ולחצו Ctrl+G להמרה אוטומטית."]));
     container.appendChild(resultsWrap);
 
     input.addEventListener("input", () => renderResults(input.value.trim()));

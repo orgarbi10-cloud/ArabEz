@@ -332,6 +332,7 @@
     });
     input.addEventListener("input", () => onInput(input.value));
     wrap.appendChild(input);
+    wrap.appendChild(el("p", { class: "hint-text" }, ["טיפ: אין מקלדת ערבית? הקלידו עברית ולחצו Ctrl+G להמרה אוטומטית."]));
     const hint = el("div", { class: "root-input__hint" }, []);
     wrap.appendChild(hint);
 

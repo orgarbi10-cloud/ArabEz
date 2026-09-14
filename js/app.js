@@ -141,6 +141,69 @@
   }
 
   // -----------------------------------------------------------------
+  // המרת עברית -> ערבית (קיצור מקלדת Ctrl+G, למי שאין לו מקלדת ערבית)
+  // -----------------------------------------------------------------
+  // הכיוון ההפוך למיפוי AR_TO_HE שבמנוע הפעלים (js/verbEngine.js) ולתעתיק
+  // אוצר המילים - "מה שכבר מובנה", כדבריו של המשתמש. שילובי גרש (ת׳/ג׳/ח׳/
+  // ד׳/צ׳/ט׳/ע׳ - וגם אפוסטרוף רגיל ' כתחליף נוח, כי לא בכל מקלדת יש גרש
+  // עברי אמיתי) נבדקים לפני אותיות בודדות, ואותיות סופיות (ך/ם/ן/ף/ץ)
+  // מנורמלות לצורתן הרגילה קודם.
+  //
+  // שתי דו-משמעויות אמיתיות בכיוון ההפוך (לפי אישור המשתמש):
+  //   א -> תמיד ا (לא أ/إ/آ/ٱ/ء - הגרסה הפשוטה והשכיחה ביותר)
+  //   ה -> תמיד ه (לא ة/תא מרבוטה, גם בסוף מילה - בלי ניחוש חכם לפי הקשר)
+  // גם ג' בלי גרש (טעות הקלדה סבירה) מטופל כמו ג׳, כי אין לו מיפוי "רגיל"
+  // משלו במוסכמה הקיימת (ج הופך תמיד לג׳, אף פעם לא לג בלי גרש).
+  const HEBREW_FINAL_TO_REGULAR = { "ך": "כ", "ם": "מ", "ן": "נ", "ף": "פ", "ץ": "צ" };
+  const HEBREW_GERESH_TO_ARABIC = { "ת": "ث", "ג": "ج", "ח": "خ", "ד": "ذ", "צ": "ض", "ט": "ظ", "ע": "غ" };
+  const HEBREW_TO_ARABIC = {
+    "א": "ا", "ב": "ب", "ג": "ج", "ד": "د", "ה": "ه", "ו": "و",
+    "ז": "ز", "ח": "ح", "ט": "ط", "י": "ي", "כ": "ك", "ל": "ل", "מ": "م", "נ": "ن",
+    "ס": "س", "ע": "ع", "פ": "ف", "צ": "ص", "ק": "ق", "ר": "ر", "ש": "ش", "ת": "ت",
+  };
+
+  function hebrewToArabic(text) {
+    if (typeof text !== "string") return text;
+    const normalized = text.replace(/[ךםןףץ]/g, (c) => HEBREW_FINAL_TO_REGULAR[c]);
+    let result = "";
+    for (let i = 0; i < normalized.length; i++) {
+      const ch = normalized[i];
+      const next = normalized[i + 1];
+      if ((next === "׳" || next === "'") && HEBREW_GERESH_TO_ARABIC[ch]) {
+        result += HEBREW_GERESH_TO_ARABIC[ch];
+        i++; // דילוג על סימן הגרש/האפוסטרוף שכבר טופל
+      } else if (HEBREW_TO_ARABIC[ch]) {
+        result += HEBREW_TO_ARABIC[ch];
+      } else {
+        result += ch; // לא אות עברית (רווח/פיסוק/ספרה/ערבית קיימת) - עובר כמו שהוא
+      }
+    }
+    return result;
+  }
+
+  // מפעיל את הקיצור Ctrl+G על כל שדה טקסט/textarea באתר: ממיר את כל תוכן
+  // השדה הממוקד מעברית לערבית במקום. שים לב: Ctrl ולא Cmd, גם במאק - כדי לא
+  // להתנגש עם קיצורים קיימים של הדפדפן.
+  function initHebrewToArabicShortcut() {
+    document.addEventListener("keydown", (e) => {
+      if (!e.ctrlKey || e.key.toLowerCase() !== "g") return;
+      const target = document.activeElement;
+      const isTextField = target instanceof HTMLElement && (target.tagName === "TEXTAREA" || (target.tagName === "INPUT" && (target.type === "text" || target.type === "search")));
+      if (!isTextField) {
+        showToast("קיצור Ctrl+G ממיר עברית לערבית - לחצו קודם בתוך שדה טקסט");
+        return;
+      }
+      e.preventDefault();
+      const converted = hebrewToArabic(target.value);
+      if (converted === target.value) return;
+      target.value = converted;
+      target.dispatchEvent(new Event("input", { bubbles: true }));
+      const pos = converted.length;
+      target.setSelectionRange(pos, pos);
+    });
+  }
+
+  // -----------------------------------------------------------------
   // ניתוב (Router) מבוסס hash
   // -----------------------------------------------------------------
   const routes = [];
@@ -235,6 +298,9 @@
     global.addEventListener("hashchange", renderRoute);
     renderRoute();
 
+    // קיצור Ctrl+G: המרת עברית לערבית בכל שדה טקסט באתר (למי שאין לו מקלדת ערבית)
+    initHebrewToArabicShortcut();
+
     const navToggle = document.getElementById("navToggle");
     navToggle.addEventListener("click", () => {
       const open = document.body.classList.toggle("nav-open");
@@ -303,6 +369,7 @@
     recordQuizResult,
     recentQuizHistory,
     stripDiacritics,
+    hebrewToArabic,
   };
 
   document.addEventListener("DOMContentLoaded", init);
