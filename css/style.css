@@ -519,6 +519,15 @@ button, input, select { font-family: inherit; font-size: 1rem; }
 .pillar-quote--grammar .pillar-quote__arabic { font-size: 1.3rem; margin-bottom: 0.5rem; }
 .pillar-quote--grammar .pillar-quote__he { font-size: 0.95rem; }
 
+/* ערך היתרון/ההפלגה (tafdil) הן היחידות מבין כרטיסי stream-card--grammar
+   שאין בהן שורת ערבית מתחת לכותרת בכלל (לא רק בלי תעתיק) - אז קו-החתימה
+   הדקורטיבי עובר לשבת ישירות מתחת לכותרת עצמה במקום. */
+.stream-card__name--underlined { padding-bottom: 0.75rem; margin-bottom: 0.4rem; position: relative; }
+.stream-card__name--underlined::after {
+  content: ""; position: absolute; bottom: 0; inset-inline-start: 50%; transform: translateX(-50%);
+  width: 48px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--color-secondary), var(--color-accent));
+}
+
 .table-scroll { overflow-x: auto; margin-bottom: 1.5rem; }
 .paradigm-wrap h3 { color: var(--color-secondary); margin-top: 1.5rem; }
 
