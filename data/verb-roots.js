@@ -107,7 +107,7 @@ const VERB_ROOTS = [
     "r2": "ظ",
     "r3": "ر",
     "hebrew": "הסתכל",
-    "translit": "נז׳ר",
+    "translit": "נט׳ר",
     "topic": "חושים",
     "pastVowel": "a",
     "presentVowel": "u"
@@ -195,7 +195,7 @@ const VERB_ROOTS = [
     "r2": "ف",
     "r3": "ظ",
     "hebrew": "שינן / שמר",
-    "translit": "חפז׳",
+    "translit": "חפט׳",
     "topic": "קוגניטיבי",
     "pastVowel": "i",
     "presentVowel": "a"
