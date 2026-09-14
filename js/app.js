@@ -184,9 +184,18 @@
   // מפעיל את הקיצור Ctrl+G על כל שדה טקסט/textarea באתר: ממיר את כל תוכן
   // השדה הממוקד מעברית לערבית במקום. שים לב: Ctrl ולא Cmd, גם במאק - כדי לא
   // להתנגש עם קיצורים קיימים של הדפדפן.
+  //
+  // בודקים לפי e.code ("KeyG") ולא e.key: e.key הוא האות הלוגית שהמקש מייצר
+  // לפי שכבת המקלדת הפעילה (כשיש שכבת מקלדת עברית פעילה - וזה המצב הרגיל
+  // כשמקלידים עברית בשדה - לחיצה על המקש הפיזי "G" לא בהכרח מייצרת "g" אלא
+  // אות עברית, וכך הזיהוי היה נכשל). e.code מזהה את מיקום המקש הפיזי בלבד,
+  // ללא תלות בשכבת המקלדת הפעילה - עובד זהה בכל שכבה ובכל מערכת הפעלה.
+  // בודקים גם e.key כגיבוי (לדוגמה דפדפנים/מקלדות וירטואליות ישנות שבהן אין
+  // e.code תקין).
   function initHebrewToArabicShortcut() {
     document.addEventListener("keydown", (e) => {
-      if (!e.ctrlKey || e.key.toLowerCase() !== "g") return;
+      const isGKey = e.code === "KeyG" || e.key.toLowerCase() === "g";
+      if (!e.ctrlKey || !isGKey) return;
       const target = document.activeElement;
       const isTextField = target instanceof HTMLElement && (target.tagName === "TEXTAREA" || (target.tagName === "INPUT" && (target.type === "text" || target.type === "search")));
       if (!isTextField) {
