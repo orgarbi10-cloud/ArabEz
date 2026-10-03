@@ -55,8 +55,21 @@
     return `${chapter.title} · ${part.title}`;
   }
 
+  // כל המילים שסומנו "לא ידעתי", מכל הפרקים/חלקים - למצב "תרגול מילים שלא
+  // ידועות" (#/vocab/review).
+  function unknownIndices() {
+    const indices = [];
+    VOCABULARY.forEach((_, i) => {
+      if (getWordStatus(i) === "unknown") indices.push(i);
+    });
+    return indices;
+  }
+
   function registerRoutes(route) {
     route("vocab", renderChapterList);
+    // "review" הוא נתיב מילולי קבוע, ולכן נרשם לפני vocab/:num (הפרמטרי) -
+    // ה-router בודק נתיבים בסדר הרשמתם ובוחר את ההתאמה הראשונה.
+    route("vocab/review", renderReview);
     route("vocab/:num", renderPartList);
     route("vocab/:num/:part", renderPartHub);
     route("vocab/:num/:part/flashcards", renderFlashcards);
@@ -72,7 +85,25 @@
     const grid = el("div", { class: "chapter-grid" }, VOCAB_CHAPTERS.map(chapterCard));
     return el("div", { class: "view view--vocab" }, [
       pageHeader("אוצר מילים", "בחרו פרק להתחלת הלימוד."),
+      reviewCard(),
       grid,
+    ]);
+  }
+
+  // כרטיס כניסה בולט ל"תרגול מילים שלא ידועות" (#/vocab/review) - מצטבר מכל
+  // הפרקים/חלקים, ולכן מוצג מעל רשימת הפרקים עצמה ולא כחלק ממנה.
+  function reviewCard() {
+    const count = unknownIndices().length;
+    const subtitle = count
+      ? `${count} מילים מסומנות "לא ידעתי" - תרגלו אותן ברצף אחד, מכל הפרקים.`
+      : 'עדיין אין מילים מסומנות "לא ידעתי". סמנו מילים בכרטיסיות של פרק, והן יופיעו כאן לתרגול חוזר.';
+    return el("a", { class: "review-card" + (count ? "" : " review-card--empty"), href: "#/vocab/review" }, [
+      el("div", { class: "review-card__icon", "aria-hidden": "true" }, ["🎯"]),
+      el("div", { class: "review-card__body" }, [
+        el("h2", { class: "review-card__title" }, ["תרגול מילים שלא ידועות"]),
+        el("p", { class: "review-card__subtitle" }, [subtitle]),
+      ]),
+      el("div", { class: "review-card__count" }, [String(count)]),
     ]);
   }
 
@@ -189,9 +220,44 @@
     const chapter = findChapter(num);
     const part = findPart(chapter, partNum);
     if (!chapter || !part) return notFound();
-    const hubHref = `#/vocab/${num}/${partNum}`;
-    const partTitle = `${chapter.title} · ${part.title}`;
-    const order = shuffle(partIndices(num, partNum));
+    return renderFlashcardSession({
+      getOrder: () => shuffle(partIndices(num, partNum)),
+      title: `${chapter.title} · ${part.title}`,
+      backHref: `#/vocab/${num}/${partNum}`,
+      backLabel: "חזרה לחלק",
+    });
+  }
+
+  // מצב "תרגול מילים שלא ידועות" (#/vocab/review) - אותו מנגנון כרטיסיות
+  // בדיוק כמו תרגול חלק בודד (ראו renderFlashcardSession), רק שמקור המילים
+  // הוא כל המילים שסומנו "לא ידעתי" בכל האתר, לא פרק/חלק אחד. showSource
+  // מציג על כל כרטיס מאיזה פרק/חלק המילה - כי כאן, בניגוד לתרגול חלק רגיל,
+  // זה לא מובן מאליו מראש.
+  function renderReview() {
+    return renderFlashcardSession({
+      getOrder: () => shuffle(unknownIndices()),
+      title: "תרגול מילים שלא ידועות",
+      backHref: "#/vocab",
+      backLabel: "חזרה לאוצר המילים",
+      showSource: true,
+      emptyTitle: "אין כרגע מילים לתרגול 🎉",
+      emptyText: 'כל המילים שסימנתם מסומנות כ"ידעתי" - או שעדיין לא סימנתם אף מילה כ"לא ידעתי". סמנו מילים בכרטיסיות של פרק כלשהו, והן יופיעו כאן.',
+      doneTitle: "סיימתם את הסבב! 🎉",
+    });
+  }
+
+  // מנגנון הכרטיסיות המשותף: מקבל getOrder() שמחזיר רשימת אינדקסים (לשימוש
+  // בתחילת התרגול ובכל "לשחק שוב" - כדי שב-review הרשימה תחושב מחדש בכל
+  // פעם ותצטמצם ככל שמסמנים יותר מילים כ"ידעתי"). אם הרשימה ריקה - בהתחלה
+  // או אחרי "לשחק שוב" - מוצג מסך ריק ייעודי (emptyTitle/emptyText) במקום
+  // מסך סיום מבלבל של "0 מתוך 0".
+  function renderFlashcardSession(opts) {
+    const { getOrder, title, backHref, backLabel, showSource } = opts;
+    const doneTitle = opts.doneTitle || "סיימתם את החלק! 🎉";
+    const emptyTitle = opts.emptyTitle || "אין מילים לתרגול";
+    const emptyText = opts.emptyText || "";
+
+    let order = getOrder();
     let pos = 0;
     let flipped = false;
     let knownCount = 0;
@@ -228,16 +294,31 @@
 
     function render() {
       container.innerHTML = "";
+
+      if (order.length === 0) {
+        container.appendChild(
+          el("div", { class: "flash-done" }, [
+            pageHeader(title, "", backHref),
+            el("div", { class: "flash-done__box" }, [
+              el("h2", {}, [emptyTitle]),
+              emptyText ? el("p", {}, [emptyText]) : null,
+              el("div", { class: "actions" }, [el("a", { class: "btn btn--primary", href: backHref }, [backLabel])]),
+            ]),
+          ])
+        );
+        return;
+      }
+
       if (pos >= order.length) {
         container.appendChild(
           el("div", { class: "flash-done" }, [
-            pageHeader(partTitle, "", hubHref),
+            pageHeader(title, "", backHref),
             el("div", { class: "flash-done__box" }, [
-              el("h2", {}, ["סיימתם את החלק! 🎉"]),
+              el("h2", {}, [doneTitle]),
               el("p", {}, [`סימנתם "ידעתי" ב-${knownCount} מתוך ${order.length} מילים.`]),
               el("div", { class: "actions" }, [
-                el("button", { class: "btn btn--primary", onClick: () => { order.splice(0, order.length, ...shuffle(partIndices(num, partNum))); pos = 0; knownCount = 0; render(); } }, ["לשחק שוב"]),
-                el("a", { class: "btn", href: hubHref }, ["חזרה לחלק"]),
+                el("button", { class: "btn btn--primary", onClick: () => { order = getOrder(); pos = 0; knownCount = 0; render(); } }, ["לשחק שוב"]),
+                el("a", { class: "btn", href: backHref }, [backLabel]),
               ]),
             ]),
           ])
@@ -249,12 +330,13 @@
       const w = VOCABULARY[idx];
       const pct = Math.round((pos / order.length) * 100);
 
-      container.appendChild(pageHeader(partTitle, `כרטיס ${pos + 1} מתוך ${order.length}`, hubHref));
+      container.appendChild(pageHeader(title, `כרטיס ${pos + 1} מתוך ${order.length}`, backHref));
       container.appendChild(progressBar(pct));
 
       const card = el("div", { class: "flashcard" + (flipped ? " is-flipped" : ""), tabindex: "0", role: "button", "aria-pressed": String(flipped), "aria-label": "לחצו כדי להפוך את הכרטיס" }, [
         el("div", { class: "flashcard__inner" }, [
           el("div", { class: "flashcard__face flashcard__face--front" }, [
+            showSource ? el("div", { class: "flashcard__source" }, [chapterPartTitleOf(w.chapter, w.part)]) : null,
             el("div", { class: "flashcard__arabic", lang: "ar" }, [displayArabic(w)]),
             w.translit ? el("div", { class: "flashcard__translit" }, [w.translit]) : null,
             el("div", { class: "flashcard__hint" }, ["לחצו להפיכה"]),

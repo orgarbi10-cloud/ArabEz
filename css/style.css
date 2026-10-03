@@ -243,6 +243,29 @@ button, input, select { font-family: inherit; font-size: 1rem; }
 
 /* ===================== Chapters / Vocabulary ===================== */
 
+/* כרטיס "תרגול מילים שלא ידועות" - מוצג מעל רשת הפרקים, שונה בכוונה מכרטיסי
+   הפרקים (פריסה אופקית + מסגרת מודגשת בצבע ההדגשה) כדי לבלוט כפעולה חוצת-
+   פרקים ולא עוד פרק ברשימה. review-card--empty (0 מילים לתרגול) מרוכך -
+   ללא צבע הדגשה בולט ומספר באפור - כדי לא להציג "0" כמו התראה.*/
+.review-card {
+  display: flex; align-items: center; gap: 1.1rem; background: var(--color-surface);
+  border: 2px solid var(--color-secondary); border-radius: var(--radius-lg); padding: 1.1rem 1.4rem;
+  margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); color: var(--color-text);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.review-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); text-decoration: none; }
+.review-card--empty { border-color: var(--color-border); }
+.review-card__icon { flex: none; font-size: 2rem; line-height: 1; }
+.review-card__body { flex: 1 1 auto; min-width: 0; }
+.review-card__title { color: var(--color-primary-dark); margin: 0 0 0.2rem; font-size: 1.15rem; }
+.review-card__subtitle { color: var(--color-text-muted); font-size: 0.9rem; margin: 0; }
+.review-card__count {
+  flex: none; min-width: 2.5rem; height: 2.5rem; padding: 0 0.5rem; border-radius: 999px;
+  background: var(--color-secondary); color: #3a2c05; font-weight: 800; font-size: 1.05rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.review-card--empty .review-card__count { background: var(--color-bg-alt); color: var(--color-text-muted); }
+
 .chapter-grid, .binyan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.25rem; }
 
 .chapter-card, .binyan-card {
@@ -341,6 +364,10 @@ button, input, select { font-family: inherit; font-size: 1rem; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
 }
 .flashcard__face--back { transform: rotateY(180deg); background-color: var(--color-primary); color: #fff; border-color: var(--color-primary-dark); }
+.flashcard__source {
+  position: absolute; top: 0.75rem; inset-inline: 0; text-align: center;
+  color: var(--color-text-muted); font-size: 0.78rem; font-weight: 600;
+}
 .flashcard__arabic { font-family: var(--font-arabic-content); font-size: 2.6rem; color: var(--color-primary-dark); }
 .flashcard__translit { color: var(--color-text-muted); font-size: 1.1rem; }
 .flashcard__hint { color: var(--color-text-muted); font-size: 0.8rem; margin-top: 0.5rem; }
