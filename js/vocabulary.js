@@ -195,9 +195,9 @@
                 el("span", { lang: "ar" }, [displayArabic(w)]),
                 detailBadgesRow(w),
               ]),
-              el("td", { class: "translit" }, [w.translit || ""]),
-              el("td", {}, [w.hebrew]),
-              el("td", {}, [statusBadge(getWordStatus(i))]),
+              el("td", { class: "translit", "data-label": "תעתיק" }, [w.translit || ""]),
+              el("td", { "data-label": "עברית" }, [w.hebrew]),
+              el("td", { "data-label": "סטטוס" }, [statusBadge(getWordStatus(i))]),
             ])
           )
         ),
@@ -588,9 +588,9 @@
                 el("span", { lang: "ar" }, [displayArabic(w)]),
                 detailBadgesRow(w),
               ]),
-              el("td", { class: "translit" }, [w.translit || ""]),
-              el("td", {}, [w.hebrew]),
-              el("td", {}, [el("a", { href: `#/vocab/${w.chapter}/${w.part}` }, [chapterPartTitleOf(w.chapter, w.part)])]),
+              el("td", { class: "translit", "data-label": "תעתיק" }, [w.translit || ""]),
+              el("td", { "data-label": "עברית" }, [w.hebrew]),
+              el("td", { "data-label": "פרק / חלק" }, [el("a", { href: `#/vocab/${w.chapter}/${w.part}` }, [chapterPartTitleOf(w.chapter, w.part)])]),
             ])
           )
         ),

@@ -146,7 +146,9 @@ button, input, select { font-family: inherit; font-size: 1rem; }
 .main-nav a.is-active { background: var(--color-secondary); color: var(--color-primary-dark); }
 
 .nav-toggle {
-  display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 0.5rem;
+  display: none; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 0.5rem;
+  min-width: 44px; min-height: 44px; /* גודל מגע מינימלי מומלץ למסך נייד */
 }
 .nav-toggle span { width: 24px; height: 2px; background: #fff; border-radius: 2px; }
 
@@ -556,6 +558,17 @@ button, input, select { font-family: inherit; font-size: 1rem; }
 }
 
 .table-scroll { overflow-x: auto; margin-bottom: 1.5rem; }
+
+/* מוצג רק כשהטבלה הרחבה (forms-table--grid, min-width:780px) עלולה לא
+   להיכנס ברוחב המסך ולדרוש גלילה אופקית - בלי זה, במסך צר, אין שום רמז
+   חזותי שיש עוד עמודות מוסתרות בצד. */
+.table-scroll-hint { display: none; }
+@media (max-width: 860px) {
+  .table-scroll-hint {
+    display: block; color: var(--color-text-muted); font-size: 0.85rem; font-weight: 600;
+    margin-bottom: 0.5rem; text-align: center;
+  }
+}
 .paradigm-wrap h3 { color: var(--color-secondary); margin-top: 1.5rem; }
 
 /* ===================== Islam feature ===================== */
@@ -683,8 +696,31 @@ button, input, select { font-family: inherit; font-size: 1rem; }
   .hero__title-he { font-size: 1.25rem; }
   .flashcard { height: 220px; }
   .flashcard__arabic { font-size: 2rem; }
-  .flashcard-row { gap: 0.4rem; }
-  .card-nav-arrow { width: 36px; height: 36px; font-size: 1.25rem; }
+  .flashcard-row { gap: 0.3rem; }
+  /* 44px - גודל מגע מינימלי מומלץ למסך נייד (היה 36px, מספיק רק לעכבר) */
+  .card-nav-arrow { width: 44px; height: 44px; font-size: 1.3rem; }
+
+  /* word-table (טבלת מילים בעמוד חלק ובתוצאות חיפוש): בארבע עמודות צרות
+     שורה עם "תגית פרט" (ריבוי/מין/עתיד) נהיית גבוהה בהרבה משאר השורה, וזה
+     נראה צפוף ולא מיושר. בנייד הופכים כל שורה לכרטיס עצמאי במקום עמודות
+     צמודות: תא הערבית משמש ככותרת הכרטיס, ושאר התאים מוצגים זה מתחת לזה
+     עם תווית (data-label, מוזן מה-th המקביל) - טכניקת "טבלה רספונסיבית"
+     נפוצה, בלי לגעת במבנה ה-HTML/JS של הטבלה עצמה מעבר לתוספת data-label. */
+  .word-table { background: transparent; box-shadow: none; border-radius: 0; }
+  .word-table thead {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; margin: -1px;
+  }
+  .word-table, .word-table tbody, .word-table tr, .word-table td { display: block; width: 100%; }
+  .word-table tr {
+    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm); padding: 0.85rem 1rem; margin-bottom: 0.75rem;
+  }
+  .word-table tr:last-child { margin-bottom: 0; }
+  .word-table td { border-bottom: none; padding: 0.3rem 0; }
+  .word-table td.ar { padding: 0 0 0.6rem; margin-bottom: 0.4rem; border-bottom: 1px dashed var(--color-border); }
+  .word-table td[data-label] { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; font-size: 0.92rem; }
+  .word-table td[data-label]::before { content: attr(data-label); color: var(--color-text-muted); font-weight: 600; font-size: 0.8rem; flex: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

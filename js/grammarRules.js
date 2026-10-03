@@ -268,26 +268,32 @@
   }
 
   function irabTable() {
-    return el("div", { class: "table-scroll" }, [
-      el("table", { class: "forms-table forms-table--grid" }, [
-        el("thead", {}, [el("tr", {}, IRAB_COLUMNS.map((c) => el("th", {}, [c.label])))]),
-        el(
-          "tbody",
-          {},
-          IRAB_ROWS.map((r) =>
-            el("tr", {}, [
-              el("td", {}, [r.caseNum]),
-              el("td", {}, [`${r.caseName} (${r.caseArabic})`]),
-              el("td", {}, [r.role]),
-              el("td", { class: "ar", lang: "ar" }, [r.definite]),
-              el("td", { class: "ar", lang: "ar" }, [r.indefinite]),
-              el("td", { class: "ar", lang: "ar" }, [r.soundMascPlural]),
-              el("td", { class: "ar", lang: "ar" }, [r.soundMascPluralConstruct]),
-              el("td", { class: "ar", lang: "ar" }, [r.dual]),
-              el("td", { class: "ar", lang: "ar" }, [r.dualConstruct]),
-            ])
-          )
-        ),
+    // הטבלה הזו (9 עמודות, רוחב מינימלי קבוע) נגללת אופקית במסכים צרים -
+    // table-scroll-hint מוצג רק שם (ראו המדיה-קוורי ב-CSS), כי ברוחב מחשב
+    // כל הטבלה גלויה בבת אחת ואין מה לגלול.
+    return el("div", {}, [
+      el("p", { class: "table-scroll-hint" }, ["💡 גללו בטבלה ימינה/שמאלה כדי לראות את כל העמודות"]),
+      el("div", { class: "table-scroll" }, [
+        el("table", { class: "forms-table forms-table--grid" }, [
+          el("thead", {}, [el("tr", {}, IRAB_COLUMNS.map((c) => el("th", {}, [c.label])))]),
+          el(
+            "tbody",
+            {},
+            IRAB_ROWS.map((r) =>
+              el("tr", {}, [
+                el("td", {}, [r.caseNum]),
+                el("td", {}, [`${r.caseName} (${r.caseArabic})`]),
+                el("td", {}, [r.role]),
+                el("td", { class: "ar", lang: "ar" }, [r.definite]),
+                el("td", { class: "ar", lang: "ar" }, [r.indefinite]),
+                el("td", { class: "ar", lang: "ar" }, [r.soundMascPlural]),
+                el("td", { class: "ar", lang: "ar" }, [r.soundMascPluralConstruct]),
+                el("td", { class: "ar", lang: "ar" }, [r.dual]),
+                el("td", { class: "ar", lang: "ar" }, [r.dualConstruct]),
+              ])
+            )
+          ),
+        ]),
       ]),
     ]);
   }
